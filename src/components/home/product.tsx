@@ -1,42 +1,42 @@
-import { Button, Card, Col, Row, Text, Badge, Spacer } from "@nextui-org/react";
+import { IProduct } from "@/services/product/product.interface";
+import { Button, Card, Row, Text, Badge, Spacer } from "@nextui-org/react";
+import { FaCartPlus } from "react-icons/fa";
 
-export default function Product({ title, category, description, price, image }: { title: string, category: string, description: string, price: number, image: string }) {
+export default function Product({ data }: { data: IProduct }) {
     return (
-        <Card css={{ width: 260, height: 380 }}>
+        <Card css={{ width: 260, height: 380 }} isHoverable>
             <Card.Image
-                src={image}
+                src={data.image}
                 width="100%"
                 height={225}
                 objectFit="cover"
-                alt={`Product ${title} Image`}
+                alt={`Product ${data.title} Image`}
             />
-
             <Card.Body css={{ paddingTop: 12 }}>
-                <Row>
+                <Row align="baseline">
                     <Badge color={'primary'} variant={'flat'} size={'xs'} isSquared disableOutline>
-                        {category}
+                        {data.category}
                     </Badge>
                     <Spacer x={0.28} />
                     <Text b color="black">
-                        {title}
+                        {data.title}
                     </Text>
                 </Row>
                 <Row css={{ padding: 2.5 }}>
                     <Text span size={'small'} color="grey">
-                        {description}
+                        {data.description}
                     </Text>
                 </Row>
             </Card.Body>
             <Card.Divider></Card.Divider>
             <Card.Footer>
-                <Row justify="space-between" align="baseline">
-                    <Button size={'sm'}>
-                        Buy
-                    </Button>
-                    <Button auto flat size={'sm'}>
-                        ⭐
-                    </Button>
-                </Row>
+                <Button auto flat size={'sm'} css={{ width: '100vw' }}>
+                    ${data.price}
+                </Button>
+                <Spacer x={0.325} />
+                <Button auto size={'sm'} css={{ marginLeft: 'auto' }}>
+                    <FaCartPlus />
+                </Button>
             </Card.Footer>
         </Card>
     )
