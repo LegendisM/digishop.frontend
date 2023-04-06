@@ -14,8 +14,8 @@ export default function Header() {
                 <Navbar.Content variant={'highlight-rounded'} hideIn={'xs'} enableCursorHighlight>
                     <Navbar.Link href="/" isActive>Home</Navbar.Link>
                     <Navbar.Link href="/products">Products</Navbar.Link>
-                    <Navbar.Link href="/about">About</Navbar.Link>
-                    <Navbar.Link href="/contact">Contact</Navbar.Link>
+                    <Navbar.Link href="/#footer">About</Navbar.Link>
+                    <Navbar.Link href="/#footer">Contact</Navbar.Link>
                 </Navbar.Content>
                 <Navbar.Content>
                     <Navbar.Link href="/auth/signin">
@@ -28,8 +28,17 @@ export default function Header() {
                     </Navbar.Item>
                 </Navbar.Content>
                 <Navbar.Collapse>
-                    <Navbar.CollapseItem key={'item'} >
-                        <Link href="#">{'item'}</Link>
+                    <Navbar.CollapseItem key='home'>
+                        <Link href="/">Home</Link>
+                    </Navbar.CollapseItem>
+                    <Navbar.CollapseItem key='products'>
+                        <Link href="/products">Products</Link>
+                    </Navbar.CollapseItem>
+                    <Navbar.CollapseItem key='about'>
+                        <Link href="/#footer">About</Link>
+                    </Navbar.CollapseItem>
+                    <Navbar.CollapseItem key='contact'>
+                        <Link href="/#footer">Contact</Link>
                     </Navbar.CollapseItem>
                 </Navbar.Collapse>
             </Navbar>

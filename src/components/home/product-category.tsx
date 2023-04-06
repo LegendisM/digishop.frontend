@@ -2,7 +2,7 @@ import Product from '@/components/home/product';
 import { IProduct } from '@/services/product/product.interface';
 import { Container, Col, Row, Divider, Grid, Text } from '@nextui-org/react';
 
-export default function ProductCategory({ title, description, products, icon }: { title: string, description: string, icon: React.ReactNode, products: IProduct[] }) {
+export default function ProductCategory({ title, description, products }: { title: string, description: string, products: IProduct[] }) {
     return (
         <Container css={{ marginTop: 28 }} lg>
             <Col>
@@ -10,7 +10,6 @@ export default function ProductCategory({ title, description, products, icon }: 
                     <Text b size={'large'}>
                         {title}
                     </Text>
-                    {icon}
                     <Text span size={'small'} hideIn={'xs'}>
                         {description}
                     </Text>

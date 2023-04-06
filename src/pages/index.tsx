@@ -1,15 +1,13 @@
 import ProductCategory from '@/components/home/product-category';
 import Layout from '@/components/layout';
-import { Divider, Spacer } from '@nextui-org/react';
-import { FcApproval, FcLike } from "react-icons/fc";
+import { Config } from '@/constants/config';
 
 export default function Home() {
   return (
-    <Layout title='Digital Shop'>
+    <Layout title={Config.title} description={Config.description}>
       <ProductCategory
         title='General'
         description='test description'
-        icon={<FcApproval />}
         products={[
           {
             id: 'f52111',
@@ -32,7 +30,6 @@ export default function Home() {
       <ProductCategory
         title='Special'
         description='test description 2'
-        icon={<FcLike />}
         products={[
           {
             id: 'f52111',
