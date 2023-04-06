@@ -2,7 +2,7 @@ import ProductCategory from '@/components/home/product-category';
 import Layout from '@/components/layout';
 import { Config } from '@/constants/config';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <Layout title={Config.title} description={Config.description}>
       <ProductCategory
