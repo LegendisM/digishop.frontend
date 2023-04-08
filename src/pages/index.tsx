@@ -1,10 +1,10 @@
 import ProductCategory from '@/components/home/product-category';
 import Layout from '@/components/layout';
-import { Config } from '@/constants/config';
+import { GlobalConfig } from '@/constants/config';
 
 export default function HomePage() {
   return (
-    <Layout title={Config.title} description={Config.description}>
+    <Layout title={GlobalConfig.title} description={GlobalConfig.description}>
       <ProductCategory
         title='General'
         description='test description'

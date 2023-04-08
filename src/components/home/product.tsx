@@ -1,4 +1,4 @@
-import { IProduct } from "@/services/product/product.interface";
+import { IProduct } from "@/common/interfaces/product/product.interface";
 import { Button, Card, Row, Text, Badge, Spacer } from "@nextui-org/react";
 import { FaCartPlus } from "react-icons/fa";
 

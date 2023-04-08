@@ -1,5 +1,5 @@
 import Product from '@/components/home/product';
-import { IProduct } from '@/services/product/product.interface';
+import { IProduct } from '@/common/interfaces/product/product.interface';
 import { Container, Col, Row, Divider, Grid, Text } from '@nextui-org/react';
 
 export default function ProductCategory({ title, description, products }: { title: string, description: string, products: IProduct[] }) {

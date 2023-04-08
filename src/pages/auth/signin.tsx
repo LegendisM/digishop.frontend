@@ -1,36 +1,56 @@
+import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
+import Alerts from "@/components/common/alerts";
 import Layout from "@/components/layout";
+import { GetApiRoute } from "@/constants/api.config";
 import { Card, Container, Text, Input, Button, Spacer } from "@nextui-org/react";
+import useAxios from "axios-hooks";
 
 export default function SignInPage() {
+    const [{ data, loading, error }, signin] = useAxios<IAuthResponseDto>({
+        method: 'post',
+        url: GetApiRoute('auth', 'signin')
+    });
+
     return (
         <Layout title="Sign In" description="User Auth SignIn">
             <Container css={{ marginTop: 28 }} xs>
-                <Card>
-                    <Card.Header css={{ justifyContent: 'center' }}>
-                        <Text b size={'large'}>
-                            Sign In
-                        </Text>
-                    </Card.Header>
-                    <Card.Divider />
-                    <Card.Body css={{ marginTop: 12, paddingTop: 0 }}>
-                        <Input
-                            clearable
-                            type="test"
-                            label="Username"
-                            placeholder="Enter Your Username"
-                        />
-                        <Spacer y={0.6} />
-                        <Input.Password
-                            clearable
-                            type="password"
-                            label="Password"
-                            placeholder="Enter Your Password"
-                        />
-                        <Spacer y={0.8} />
-                        <Button type="submit">Submit</Button>
-                    </Card.Body>
-                </Card>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    signin();
+                }}>
+                    <Card>
+                        <Card.Header css={{ justifyContent: 'center' }}>
+                            <Text b size={'large'}>
+                                Sign In
+                            </Text>
+                        </Card.Header>
+                        <Card.Divider />
+                        <Card.Body css={{ marginTop: 12, paddingTop: 0 }}>
+                            <Input
+                                clearable
+                                required
+                                minLength={4}
+                                type="test"
+                                label="Username"
+                                placeholder="Enter Your Username"
+                            />
+                            <Spacer y={0.6} />
+                            <Input.Password
+                                clearable
+                                required
+                                minLength={4}
+                                type="password"
+                                label="Password"
+                                placeholder="Enter Your Password"
+                            />
+                            <Spacer y={0.8} />
+                            <Button type="submit">Submit</Button>
+                            <Spacer y={1} />
+                            <Alerts messages={[{ type: 'error', title: 'test', content: 'hifg dgdfdgdfg dfgdg' }]} />
+                        </Card.Body>
+                    </Card>
+                </form>
             </Container>
-        </Layout>
+        </Layout >
     )
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
     return (
-        <footer id="footer">
+        <footer id="footer" style={{ marginTop: 8 }}>
             <Container css={{ padding: 15 }} lg>
                 <Card css={{ padding: 15, paddingBottom: 2 }} isHoverable>
                     <Card.Body css={{ alignItems: 'center' }}>
