@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function Footer() {
     return (
-        <footer id="footer" style={{ marginTop: 8 }}>
-            <Container css={{ padding: 15 }} lg>
+        <footer id="footer">
+            <Container css={{ marginTop: 20, paddingBottom: 15 }} lg>
                 <Card css={{ padding: 15, paddingBottom: 2 }} isHoverable>
                     <Card.Body css={{ alignItems: 'center' }}>
                         <User src="/images/avatars/legendism.png" name="Hamidreza Mohammadi" bordered>

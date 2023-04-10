@@ -3,13 +3,14 @@ import { Button, Link, Navbar, Spacer, Text } from "@nextui-org/react";
 export default function Header({ pageKey }: { pageKey: string }) {
     const links: { key: string, name: string, href: string }[] = [
         { key: "home", name: "Home", href: "/" },
+        { key: "dashboard", name: "Dashboard", href: "/dashboard" },
+        { key: "search", name: "Search", href: "/search" },
         { key: "about", name: "About", href: "/#footer" },
-        { key: "contact", name: "Contact", href: "/#footer" },
     ];
 
     return (
         <header>
-            <Navbar variant={'floating'} shouldHideOnScroll isBordered>
+            <Navbar variant={'sticky'} shouldHideOnScroll isBordered>
                 <Navbar.Brand css={{ "@xs": { w: "12%" } }}>
                     <Navbar.Toggle showIn={'xs'} />
                     <Spacer x={0.35} />
