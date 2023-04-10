@@ -1,5 +1,5 @@
 export interface IAuthResponseDto {
-    status: boolean;
+    state: boolean;
     token: string;
     message: string;
 }

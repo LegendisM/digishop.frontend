@@ -7,9 +7,10 @@ import useAxios from "axios-hooks";
 
 export default function SignInPage() {
     const [{ data, loading, error }, signin] = useAxios<IAuthResponseDto>({
-        method: 'post',
-        url: GetApiRoute('auth', 'signin')
-    });
+        url: GetApiRoute('auth', 'signin'),
+        method: 'POST',
+        data: { username: 'LegendisM', password: 'LegendisM1212' }
+    }, { manual: true });
 
     return (
         <Layout pageKey="signin" title="Sign In" description="User Auth SignIn">
@@ -46,7 +47,7 @@ export default function SignInPage() {
                             <Spacer y={0.8} />
                             <Button type="submit">Submit</Button>
                             <Spacer y={1} />
-                            <Alerts messages={[{ type: 'error', title: 'test', content: 'hifg dgdfdgdfg dfgdg' }]} />
+                            <Alerts messages={(data ? [{ type: 'error', title: `${data.state ? 'a' : 'b'}`, content: `${data.message} | ${data.token}` }] : [])} />
                         </Card.Body>
                     </Card>
                 </form>

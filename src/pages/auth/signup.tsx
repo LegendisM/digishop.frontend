@@ -10,7 +10,7 @@ export default function SignUpPage() {
     const [{ data, loading, error }, signup] = useAxios<IAuthResponseDto>({
         method: 'post',
         url: GetApiRoute('auth', 'signup')
-    });
+    }, { manual: true });
 
     return (
         <Layout pageKey="signup" title="Sign Up" description="User Auth SignUp">

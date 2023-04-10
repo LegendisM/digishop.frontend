@@ -1,6 +1,7 @@
-const routes: { [key: string]: { [key: string]: string } } = {
+const config: { [key: string]: { [key: string]: string } } = {
     ["main"]: {
-        ['url']: 'http://localhost/api/v1'
+        ['base']: 'http://localhost:80',
+        ['api']: 'api/v1'
     },
     ['auth']: {
         ['signin']: 'auth/signin',
@@ -12,5 +13,5 @@ const routes: { [key: string]: { [key: string]: string } } = {
 }
 
 export function GetApiRoute(category: string, key: string): string {
-    return `${routes['main']['url']}/${routes[category][key]}`;
+    return `${config['main']['base']}/${config['main']['api']}/${config[category][key]}`;
 }
