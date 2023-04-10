@@ -4,7 +4,7 @@ import { GlobalConfig } from '@/constants/config';
 
 export default function HomePage() {
   return (
-    <Layout title={GlobalConfig.title} description={GlobalConfig.description}>
+    <Layout pageKey='home' title="Home" description={GlobalConfig.description}>
       <ProductCategory
         title='General'
         description='test description'

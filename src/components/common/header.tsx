@@ -1,6 +1,12 @@
 import { Button, Link, Navbar, Spacer, Text } from "@nextui-org/react";
 
-export default function Header() {
+export default function Header({ pageKey }: { pageKey: string }) {
+    const links: { key: string, name: string, href: string }[] = [
+        { key: "home", name: "Home", href: "/" },
+        { key: "about", name: "About", href: "/#footer" },
+        { key: "contact", name: "Contact", href: "/#footer" },
+    ];
+
     return (
         <header>
             <Navbar variant={'floating'} shouldHideOnScroll isBordered>
@@ -12,9 +18,9 @@ export default function Header() {
                     </Text>
                 </Navbar.Brand>
                 <Navbar.Content variant={'highlight-rounded'} hideIn={'xs'} enableCursorHighlight>
-                    <Navbar.Link href="/" isActive>Home</Navbar.Link>
-                    <Navbar.Link href="/#footer">About</Navbar.Link>
-                    <Navbar.Link href="/#footer">Contact</Navbar.Link>
+                    {
+                        links.map((link) => (<Navbar.Link href={link.href} isActive={link.key == pageKey}>{link.name}</Navbar.Link>))
+                    }
                 </Navbar.Content>
                 <Navbar.Content>
                     <Navbar.Link href="/auth/signin">

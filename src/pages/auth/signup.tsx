@@ -13,7 +13,7 @@ export default function SignUpPage() {
     });
 
     return (
-        <Layout title="Sign Up" description="User Auth SignUp">
+        <Layout pageKey="signup" title="Sign Up" description="User Auth SignUp">
             <Container css={{ marginTop: 28 }} xs>
                 <form onSubmit={(e) => {
                     e.preventDefault();
