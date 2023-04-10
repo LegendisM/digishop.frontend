@@ -30,7 +30,7 @@ export default function SignInPage() {
                                 clearable
                                 required
                                 minLength={4}
-                                type="test"
+                                type="text"
                                 label="Username"
                                 placeholder="Enter Your Username"
                             />

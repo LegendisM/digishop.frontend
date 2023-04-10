@@ -1,7 +1,6 @@
 import Alerts from "@/components/common/alerts";
 import Layout from "@/components/layout";
-import { Button, Card, Container, Input, Spacer, Text } from "@nextui-org/react";
-import signin from "../auth/signin";
+import { Button, Card, Container, Input, Navbar, Spacer, Text } from "@nextui-org/react";
 
 export default function DashboardPage() {
     return (
@@ -9,9 +8,7 @@ export default function DashboardPage() {
             <Container css={{ marginTop: 28 }} lg>
                 <Card>
                     <Card.Header css={{ justifyContent: 'center' }}>
-                        <Text b size={'large'}>
-                            Sign In
-                        </Text>
+                        Tabs
                     </Card.Header>
                     <Card.Divider />
                     <Card.Body css={{ marginTop: 12, paddingTop: 0 }}>
