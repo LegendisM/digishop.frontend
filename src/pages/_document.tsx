@@ -1,12 +1,12 @@
+import { createGetInitialProps } from '@mantine/next'
 import { Html, Head, Main, NextScript } from 'next/document'
-import { CssBaseline } from "@nextui-org/react";
 
 export default function Document() {
+  const getInitialProps = createGetInitialProps();
+
   return (
     <Html lang="en">
-      <Head>
-        {CssBaseline.flush()}
-      </Head>
+      <Head></Head>
       <body>
         <Main />
         <NextScript />

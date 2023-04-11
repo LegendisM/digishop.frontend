@@ -1,8 +1,7 @@
 import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
-import Alerts from "@/components/common/alerts";
 import Layout from "@/components/layout";
 import { GetApiRoute } from "@/constants/api.config";
-import { Card, Container, Text, Input, Button, Spacer } from "@nextui-org/react";
+import { Anchor, Button, Checkbox, Container, Group, Paper, PasswordInput, TextInput, Title, Text, Divider } from "@mantine/core";
 import useAxios from "axios-hooks";
 
 export default function SignInPage() {
@@ -14,43 +13,32 @@ export default function SignInPage() {
 
     return (
         <Layout pageKey="signin" title="Sign In" description="User Auth SignIn">
-            <Container css={{ marginTop: 28 }} xs>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    signin();
-                }}>
-                    <Card>
-                        <Card.Header css={{ justifyContent: 'center' }}>
-                            <Text b size={'large'}>
-                                Sign In
-                            </Text>
-                        </Card.Header>
-                        <Card.Divider />
-                        <Card.Body css={{ marginTop: 12, paddingTop: 0 }}>
-                            <Input
-                                clearable
-                                required
-                                minLength={4}
-                                type="text"
-                                label="Username"
-                                placeholder="Enter Your Username"
-                            />
-                            <Spacer y={0.6} />
-                            <Input.Password
-                                clearable
-                                required
-                                minLength={4}
-                                type="password"
-                                label="Password"
-                                placeholder="Enter Your Password"
-                            />
-                            <Spacer y={0.8} />
-                            <Button type="submit">Submit</Button>
-                            <Spacer y={1} />
-                            <Alerts messages={(data ? [{ type: 'error', title: `${data.state ? 'a' : 'b'}`, content: `${data.message} | ${data.token}` }] : [])} />
-                        </Card.Body>
-                    </Card>
-                </form>
+            <Container size={'xs'} my={40}>
+                <Title
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+                >
+                    Welcome back!
+                </Title>
+                <Text color="dimmed" size="sm" align="center" mt={5}>
+                    Do not have an account yet?{' '}
+                    <Anchor href="/auth/signup" size="sm">
+                        Create account
+                    </Anchor>
+                </Text>
+
+                <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        signin();
+                    }}>
+                        <TextInput name="username" label="Username" placeholder="Your Username" required />
+                        <PasswordInput name="password" label="Password" placeholder="Your Password" required mt="md" />
+                        <Button type="submit" fullWidth mt="xl">
+                            Sign in
+                        </Button>
+                    </form>
+                </Paper>
             </Container>
         </Layout >
     )

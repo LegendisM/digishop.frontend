@@ -1,30 +1,32 @@
 import Product from '@/components/home/product';
 import { IProduct } from '@/common/interfaces/product/product.interface';
-import { Container, Col, Row, Divider, Grid, Text } from '@nextui-org/react';
+import { SimpleGrid, Divider, Grid, Box, Text, Flex } from '@mantine/core';
 
 export default function ProductCategory({ title, description, products }: { title: string, description: string, products: IProduct[] }) {
     return (
-        <Container css={{ marginTop: 28 }} lg>
-            <Col>
-                <Row justify='space-between'>
-                    <Text b size={'large'}>
-                        {title}
-                    </Text>
-                    <Text span size={'small'} hideIn={'xs'}>
-                        {description}
-                    </Text>
-                </Row>
-                <Divider></Divider>
-                <Row css={{ paddingTop: 8 }}>
-                    <Grid.Container justify='center' gap={1}>
-                        {products.map((product, index) => (
-                            <Grid>
-                                <Product data={product} />
-                            </Grid>
-                        ))}
-                    </Grid.Container>
-                </Row>
-            </Col>
-        </Container>
+        <Box p={'xs'}>
+            <Box>
+                <Text weight={'bold'} size={'large'}>
+                    {title}
+                </Text>
+                <Text span size={'small'}>
+                    {description}
+                </Text>
+            </Box>
+            <Divider mt={'sm'} mb={'sm'}></Divider>
+            <Box p={'xs'}>
+                <Flex
+                    gap="md"
+                    justify="center"
+                    align="center"
+                    direction="row"
+                    wrap="wrap"
+                >
+                    {products.map((product, index) => (
+                        <Product data={product} />
+                    ))}
+                </Flex>
+            </Box>
+        </Box>
     );
 }

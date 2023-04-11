@@ -1,7 +1,7 @@
-import Alerts from "@/components/common/alerts";
 import Layout from "@/components/layout";
 import { GetApiRoute } from "@/constants/api.config";
-import { Button, Card, Container, Input, Spacer, Text } from "@nextui-org/react";
+import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 import useAxios from "axios-hooks";
 
 export default function SearchPage() {
@@ -12,44 +12,32 @@ export default function SearchPage() {
 
     return (
         <Layout pageKey="search" title="Search" description="Find Your Favorite Product With Advanced Search">
-            <Container css={{ marginTop: 28 }} xs>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    search();
-                }}>
-                    <Card>
-                        <Card.Header css={{ justifyContent: 'center' }}>
-                            <Text b size={'large'}>
-                                Advanced Search
-                            </Text>
-                        </Card.Header>
-                        <Card.Divider />
-                        <Card.Body>
-                            <Input
-                                clearable
-                                type="text"
-                                label="Category"
-                                placeholder="Enter Your Category Name"
-                            />
-                            <Spacer y={0.6} />
-                            <Input
-                                clearable
-                                type="text"
-                                label="Title"
-                                placeholder="Enter Your Title"
-                            />
-                            <Spacer y={0.6} />
-                            <Input
-                                clearable
-                                type="text"
-                                label="Description"
-                                placeholder="Enter Your Description"
-                            />
-                            <Spacer y={0.8} />
-                            <Button type="submit">Start</Button>
-                        </Card.Body>
-                    </Card>
-                </form>
+            <Container size={'sm'} my={40}>
+                <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
+                    <Flex justify={'space-between'} align={'center'}>
+                        <Space />
+                        <Title
+                            align="center"
+                            size={'18'}
+                            sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 700 })}
+                        >
+                            Advanced Search
+                        </Title>
+                        <IconSearch />
+                    </Flex>
+                    <Divider mt={'xs'} mb={'xs'} />
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        search();
+                    }}>
+                        <TextInput name="title" label="Name" placeholder="Enter title" />
+                        <TextInput name="category" label="Category" placeholder="Enter category" mt={'md'} />
+                        <TextInput name="description" label="Description" placeholder="Enter description" mt={'md'} />
+                        <Button type="submit" fullWidth mt={'xl'}>
+                            Find
+                        </Button>
+                    </form>
+                </Paper>
             </Container>
         </Layout>
     );

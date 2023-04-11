@@ -1,43 +1,43 @@
 import { IProduct } from "@/common/interfaces/product/product.interface";
-import { Button, Card, Row, Text, Badge, Spacer } from "@nextui-org/react";
-import { FaCartPlus } from "react-icons/fa";
+import { Badge, Button, Card, Group, Text, Image, Box } from "@mantine/core";
+import { IconCash, IconTextCaption } from "@tabler/icons-react";
 
 export default function Product({ data }: { data: IProduct }) {
     return (
-        <Card css={{ width: 260, height: 380 }} isHoverable>
-            <Card.Image
-                src={data.image}
-                width="100%"
-                height={225}
-                objectFit="cover"
-                alt={`Product ${data.title} Image`}
-            />
-            <Card.Body css={{ paddingTop: 12 }}>
-                <Row align="baseline">
-                    <Badge color={'primary'} variant={'flat'} size={'xs'} isSquared disableOutline>
-                        {data.category}
-                    </Badge>
-                    <Spacer x={0.28} />
-                    <Text b color="black">
-                        {data.title}
+        <Card shadow="sm" padding="sm" radius="md" withBorder>
+            <Card.Section>
+                <Image
+                    src={data.image}
+                    height={160}
+                    alt={`Product ${data.title} Image`}
+                />
+            </Card.Section>
+
+            <Group position="apart" mt="sm" mb="xs">
+                <Text weight={500}>{data.title}</Text>
+                <Badge color="green" variant="light">
+                    {data.category}
+                </Badge>
+            </Group>
+
+            <Text size="sm" color="dimmed">
+                <Group spacing={'5px'}>
+                    <IconCash size={'18px'} />
+                    <Text>
+                        ${data.price}
                     </Text>
-                </Row>
-                <Row css={{ padding: 2.5 }}>
-                    <Text span size={'small'} color="grey">
+                </Group>
+                <Group spacing={'5px'} mt={"xs"}>
+                    <IconTextCaption size={'18px'} />
+                    <Text>
                         {data.description}
                     </Text>
-                </Row>
-            </Card.Body>
-            <Card.Divider></Card.Divider>
-            <Card.Footer>
-                <Button auto flat size={'sm'} css={{ width: '100vw' }}>
-                    ${data.price}
-                </Button>
-                <Spacer x={0.325} />
-                <Button auto size={'sm'} css={{ marginLeft: 'auto' }}>
-                    <FaCartPlus />
-                </Button>
-            </Card.Footer>
+                </Group>
+            </Text>
+
+            <Button variant="gradient" fullWidth mt="md" radius="md">
+                View Page
+            </Button>
         </Card>
     )
 }
