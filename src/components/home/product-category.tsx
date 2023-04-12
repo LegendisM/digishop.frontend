@@ -23,7 +23,7 @@ export default function ProductCategory({ title, description, products }: { titl
                     wrap="wrap"
                 >
                     {products.map((product, index) => (
-                        <Product data={product} />
+                        <Product key={index} data={product} />
                     ))}
                 </Flex>
             </Box>
