@@ -1,7 +1,7 @@
 import Layout from "@/components/layout";
 import { Anchor, Button, Container, Paper, PasswordInput, TextInput, Title, Text, Box, Space, LoadingOverlay } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
-import { useAxios } from "@/common/helpers/api.helper";
+import { useAxios } from "@/common/service/api.service";
 import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
 import { GetApiRoute } from "@/constants/api.config";
 import Alerts, { AlertColors } from "@/components/common/alerts";

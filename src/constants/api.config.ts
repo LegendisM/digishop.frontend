@@ -7,7 +7,7 @@ const config: { [key: string]: { [key: string]: string } } = {
         ['signup']: 'auth/signup'
     },
     ['product']: {
-        ['search']: 'product/search'
+        ['find']: 'product'
     },
 }
 

@@ -1,8 +1,16 @@
 import Product from '@/components/home/product';
-import { IProduct } from '@/common/interfaces/product/product.interface';
-import { SimpleGrid, Divider, Grid, Box, Text, Flex } from '@mantine/core';
+import { Divider, Box, Text, Flex, Skeleton } from '@mantine/core';
+import { useAxios } from '@/common/service/api.service';
+import { GetApiRoute } from '@/constants/api.config';
+import { IProductFindResponseDto } from '@/common/interfaces/product/product.dto';
 
-export default function ProductCategory({ title, description, products }: { title: string, description: string, products: IProduct[] }) {
+export default function ProductCategory({ title, category, description, limit }: { title: string, category: string, description: string, limit: number }) {
+    const [{ data, loading, error }] = useAxios<IProductFindResponseDto>({
+        url: GetApiRoute('product', 'find'),
+        method: 'GET',
+        params: { category, page: 1, limit },
+    }, { manual: false });
+
     return (
         <Box p={'xs'}>
             <Box>
@@ -15,17 +23,19 @@ export default function ProductCategory({ title, description, products }: { titl
             </Box>
             <Divider mt={'sm'} mb={'sm'}></Divider>
             <Box p={'xs'}>
-                <Flex
-                    gap="md"
-                    justify="center"
-                    align="center"
-                    direction="row"
-                    wrap="wrap"
-                >
-                    {products.map((product, index) => (
-                        <Product key={index} data={product} />
-                    ))}
-                </Flex>
+                <Skeleton visible={false}>
+                    <Flex
+                        gap="md"
+                        justify="center"
+                        align="center"
+                        direction="row"
+                        wrap="wrap"
+                    >
+                        {data?.products.map((product, index) => (
+                            <Product key={index} data={product} />
+                        ))}
+                    </Flex>
+                </Skeleton>
             </Box>
         </Box>
     );

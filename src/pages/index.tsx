@@ -7,47 +7,15 @@ export default function HomePage() {
     <Layout pageKey='home' title="Home" description={GlobalConfig.description}>
       <ProductCategory
         title='General'
+        category='GENERAL'
         description='test description'
-        products={[
-          {
-            id: 'f52111',
-            title: 'product 1',
-            category: 'GENERAL',
-            description: 'description test 123',
-            image: 'https://nextui.org/images/card-example-1.jpeg',
-            price: 254
-          },
-          {
-            id: '423vg5,',
-            title: 'product 2',
-            category: 'GENERAL',
-            description: 'description test 421',
-            image: 'https://nextui.org/images/card-example-2.jpeg',
-            price: 1029
-          },
-        ]}
+        limit={8}
       />
       <ProductCategory
         title='Special'
+        category='SPECIAL'
         description='test description 2'
-        products={[
-          {
-            id: 'f52111',
-            title: 'product 1',
-            category: 'GENERAL',
-            description: 'description test 123',
-            image: 'https://nextui.org/images/card-example-1.jpeg',
-            price: 254
-          },
-          {
-            id: '423vg5,',
-            title: 'product 2',
-            category: 'GENERAL',
-            description: 'description test 421',
-            image: 'https://nextui.org/images/card-example-2.jpeg',
-            price: 1029
-          },
-        ]}
+        limit={8}
       />
     </Layout>
   )

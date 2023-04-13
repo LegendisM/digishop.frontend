@@ -4,17 +4,18 @@ import { IconCash, IconTextCaption } from "@tabler/icons-react";
 
 export default function Product({ data }: { data: IProduct }) {
     return (
-        <Card shadow="sm" padding="sm" radius="md" withBorder>
+        <Card shadow="sm" padding="sm" radius="md" miw={"300px"} withBorder>
             <Card.Section>
                 <Image
                     src={data.image}
-                    height={160}
-                    alt={`Product ${data.title} Image`}
+                    height={200}
+                    fit="cover"
+                    alt={`Product ${data.name} Image`}
                 />
             </Card.Section>
 
             <Group position="apart" mt="sm" mb="xs">
-                <Text weight={500}>{data.title}</Text>
+                <Text weight={500}>{data.name}</Text>
                 <Badge color="green" variant="light">
                     {data.category}
                 </Badge>
