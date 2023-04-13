@@ -1,12 +1,17 @@
-import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
-import { useAxios } from "@/common/services/api.service";
-import Alerts, { AlertColors } from "@/components/common/alerts";
 import Layout from "@/components/layout";
-import { GetApiRoute } from "@/constants/api.config";
-import { Anchor, Button, Container, Paper, PasswordInput, TextInput, Title, Text, Space, Box } from "@mantine/core";
+import { Anchor, Button, Container, Paper, PasswordInput, TextInput, Title, Text, Box, Space, LoadingOverlay } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
+import { useAxios } from "@/common/helpers/api.helper";
+import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
+import { GetApiRoute } from "@/constants/api.config";
+import Alerts, { AlertColors } from "@/components/common/alerts";
+import { AxiosResponse } from "axios";
+import { useState } from "react";
+import { useLocalStorage } from "@mantine/hooks";
+import { useRouter } from "next/router";
 
 export default function SignInPage() {
+    const router = useRouter();
     const form = useForm({
         initialValues: {
             username: '',
@@ -22,9 +27,22 @@ export default function SignInPage() {
         method: 'POST',
         data: form.values
     });
+    const [token, setToken] = useLocalStorage({ key: 'token' });
+    const [overlay, setOverlay] = useState(false);
+
+    const onSigninResponse = (response: AxiosResponse<IAuthResponseDto>) => {
+        if (response.data.state) {
+            setToken(response.data.token);
+            setOverlay(true);
+            setTimeout(() => {
+                router.push("/");
+            }, 1000)
+        }
+    }
 
     return (
         <Layout pageKey="signin" title="Sign In" description="User Auth SignIn">
+            <LoadingOverlay visible={overlay} />
             <Container size={'xs'} my={40}>
                 <Title
                     align="center"
@@ -40,7 +58,9 @@ export default function SignInPage() {
                 </Text>
 
                 <Paper withBorder shadow="md" p={30} pb={25} mt={30} radius="md">
-                    <Box component="form" onSubmit={form.onSubmit((values) => { signin(); })}>
+                    <Box component="form" onSubmit={form.onSubmit((values) => {
+                        signin().then(onSigninResponse);
+                    })}>
                         <TextInput
                             name="username"
                             label="Username"
