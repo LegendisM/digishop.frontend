@@ -1,12 +1,18 @@
 import { Alert } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 
-export default function Alerts(data: { messages: { type: string, title: string, content: string }[] }) {
+export enum AlertColors {
+    success = 'blue',
+    warning = 'yellow',
+    error = 'red'
+}
+
+export default function Alerts(data: { messages: { title: string, content: string, condition: boolean, color: AlertColors }[] }) {
     return (
         <>
             {
-                data.messages.map((msg) => (
-                    <Alert icon={<IconAlertCircle size="1rem" />} title={msg.title} color="red" withCloseButton>
+                data.messages.map((msg, index) => (
+                    <Alert key={index} mt={'xs'} icon={<IconAlertCircle size="1rem" />} title={msg.title} hidden={msg.condition == false} color={msg.color}>
                         {msg.content}
                     </Alert>
                 ))
