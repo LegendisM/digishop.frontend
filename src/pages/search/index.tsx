@@ -1,17 +1,38 @@
+import { IProductSearchResponseDto } from "@/common/interfaces/product/product.dto";
+import { ProductCategories } from "@/common/interfaces/product/product.interface";
+import { useAxios } from "@/common/service/api.service";
+import Product from "@/components/home/product";
 import Layout from "@/components/layout";
 import { GetApiRoute } from "@/constants/api.config";
-import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space } from "@mantine/core";
+import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space, Box, LoadingOverlay, Select, Modal, Text } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
-import useAxios from "axios-hooks";
 
 export default function SearchPage() {
-    const [{ data, loading, error }, search] = useAxios({
+    const [opened, { open, close }] = useDisclosure(false);
+    const form = useForm({
+        initialValues: {
+            name: '',
+            category: 'GENERAL',
+            description: '',
+            page: 1,
+            limit: 10,
+        }
+    });
+    const [{ data, loading, error }, search] = useAxios<IProductSearchResponseDto>({
         method: 'GET',
-        url: GetApiRoute('product', 'search')
+        url: GetApiRoute('product', 'search'),
+        params: form.values
     }, { manual: true });
+
+    const onSearchResponse = () => {
+        open();
+    }
 
     return (
         <Layout pageKey="search" title="Search" description="Find Your Favorite Product With Advanced Search">
+            <LoadingOverlay visible={loading} />
             <Container size={'sm'} my={40}>
                 <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
                     <Flex justify={'space-between'} align={'center'}>
@@ -26,19 +47,54 @@ export default function SearchPage() {
                         <IconSearch />
                     </Flex>
                     <Divider mt={'xs'} mb={'xs'} />
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        search();
-                    }}>
-                        <TextInput name="title" label="Name" placeholder="Enter title" />
-                        <TextInput name="category" label="Category" placeholder="Enter category" mt={'md'} />
-                        <TextInput name="description" label="Description" placeholder="Enter description" mt={'md'} />
+                    <Box component={'form'} onSubmit={form.onSubmit((values) => {
+                        search().then(onSearchResponse);
+                    })}>
+                        <Select
+                            name="category"
+                            label="Category"
+                            placeholder="Enter category"
+                            data={Object.values(ProductCategories).map((category) => ({
+                                label: category,
+                                value: category.toUpperCase()
+                            }))}
+                            {...form.getInputProps('category')}
+                        />
+                        <TextInput
+                            name="name"
+                            label="Name"
+                            placeholder="Enter Name"
+                            mt={'md'}
+                            {...form.getInputProps('name')}
+                        />
+                        <TextInput
+                            name="description"
+                            label="Description"
+                            placeholder="Enter description"
+                            mt={'md'}
+                            {...form.getInputProps('description')}
+                        />
                         <Button type="submit" fullWidth mt={'xl'}>
                             Find
                         </Button>
-                    </form>
+                    </Box>
                 </Paper>
             </Container>
+            <Modal opened={opened} size={"calc(100vw - 3rem)"} onClose={close} title={'Search Result'}>
+                <Box p={'xs'}>
+                    <Flex
+                        gap="md"
+                        justify="center"
+                        align="center"
+                        direction="row"
+                        wrap="wrap"
+                    >
+                        {(data?.products?.length ?? 0) > 0 ? data?.products.map((product, index) => (
+                            <Product key={index} data={product} />
+                        )) : <Text>No Product Was Found For Your Search</Text>}
+                    </Flex>
+                </Box>
+            </Modal>
         </Layout>
     );
 }
