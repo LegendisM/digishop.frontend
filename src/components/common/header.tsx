@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { MantineLogo } from '@mantine/ds';
 import { useDisclosure } from '@mantine/hooks';
+import Auth from './auth';
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -78,9 +79,6 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                         <a href="/" className={classes.link}>
                             Home
                         </a>
-                        <a href="/dashboard" className={classes.link}>
-                            Dashboard
-                        </a>
                         <a href="/search" className={classes.link}>
                             Search
                         </a>
@@ -90,8 +88,13 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                     </Group>
 
                     <Group className={classes.hiddenMobile}>
-                        <Button href='/auth/signin' component='a' variant="default">Log in</Button>
-                        <Button href='/auth/signup' component='a'>Sign up</Button>
+                        <Auth auth={false}>
+                            <Button href='/auth/signin' component='a' variant="default">Login</Button>
+                            <Button href='/auth/signup' component='a'>Sign up</Button>
+                        </Auth>
+                        <Auth auth={true}>
+                            <Button href='/dashboard' component='a' variant="default">Dashboard</Button>
+                        </Auth>
                     </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
@@ -113,9 +116,6 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                     <a href="/" className={classes.link}>
                         Home
                     </a>
-                    <a href="/dashboard" className={classes.link}>
-                        Dashboard
-                    </a>
                     <a href="/search" className={classes.link}>
                         Search
                     </a>
@@ -126,8 +126,13 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                     <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
                     <Group position="center" grow pb="xl" px="md">
-                        <Button href='/auth/signin' component='a' variant="default">Log in</Button>
-                        <Button href='/auth/signup' component='a'>Sign up</Button>
+                        <Auth auth={false}>
+                            <Button href='/auth/signin' component='a' variant="default">Login</Button>
+                            <Button href='/auth/signup' component='a'>Sign up</Button>
+                        </Auth>
+                        <Auth auth={true}>
+                            <Button href='/dashboard' component='a' variant="default">Dashboard</Button>
+                        </Auth>
                     </Group>
                 </ScrollArea>
             </Drawer>

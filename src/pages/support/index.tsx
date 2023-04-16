@@ -8,6 +8,7 @@ import { GetApiRoute } from '@/constants/api.config';
 import { ISupportSendResponseDto } from '@/common/interfaces/support/support.dto';
 import Alerts, { AlertColors } from '@/components/common/alerts';
 import { useRouter } from 'next/router';
+import Auth from '@/components/common/auth';
 
 export default function SupportPage() {
     const router = useRouter();
@@ -35,63 +36,65 @@ export default function SupportPage() {
 
     return (
         <Layout pageKey="support" title="Support" description="Get in touch with our powerful team">
-            <LoadingOverlay visible={loading} />
-            <Container size={'sm'} my={40}>
-                <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
-                    <Flex justify={'space-between'} align={'center'}>
-                        <Space />
-                        <Title
-                            align="center"
-                            size={'18'}
-                            sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 700 })}
-                        >
-                            Get in touch with our powerful team
-                        </Title>
-                        <IconPhoneCall />
-                    </Flex>
-                    <Divider mt={'xs'} mb={'xs'} />
-                    <Box component='form' onSubmit={form.onSubmit((values) => {
-                        send().then(onSendResponse);
-                    })}>
-                        <TextInput
-                            name="subject"
-                            label="Subject"
-                            placeholder="Subject"
-                            mt="md"
-                            variant="filled"
-                            {...form.getInputProps('subject')}
-                        />
-                        <Textarea
-                            name="content"
-                            label="Message"
-                            placeholder="Your message"
-                            maxRows={10}
-                            minRows={5}
-                            autosize
-                            variant="filled"
-                            mt="md"
-                            {...form.getInputProps('content')}
-                        />
+            <Auth auth={true} message={true}>
+                <LoadingOverlay visible={loading || data?.state == true} />
+                <Container size={'sm'} my={40}>
+                    <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
+                        <Flex justify={'space-between'} align={'center'}>
+                            <Space />
+                            <Title
+                                align="center"
+                                size={'18'}
+                                sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 700 })}
+                            >
+                                Get in touch with our powerful team
+                            </Title>
+                            <IconPhoneCall />
+                        </Flex>
+                        <Divider mt={'xs'} mb={'xs'} />
+                        <Box component='form' onSubmit={form.onSubmit((values) => {
+                            send().then(onSendResponse);
+                        })}>
+                            <TextInput
+                                name="subject"
+                                label="Subject"
+                                placeholder="Subject"
+                                mt="md"
+                                variant="filled"
+                                {...form.getInputProps('subject')}
+                            />
+                            <Textarea
+                                name="content"
+                                label="Message"
+                                placeholder="Your message"
+                                maxRows={10}
+                                minRows={5}
+                                autosize
+                                variant="filled"
+                                mt="md"
+                                {...form.getInputProps('content')}
+                            />
 
-                        <Group position="center" mt="xl">
-                            <Button type="submit" size="md">
-                                Send Message
-                            </Button>
-                        </Group>
-                    </Box>
-                    <Space h={'md'} />
-                    <Alerts
-                        messages={[
-                            {
-                                condition: data !== undefined && data?.state == false,
-                                color: AlertColors.error,
-                                title: 'Error',
-                                content: "There was a problem creating your support request"
-                            }
-                        ]}
-                    />
-                </Paper>
-            </Container>
+                            <Group position="center" mt="xl">
+                                <Button type="submit" size="md">
+                                    Send Message
+                                </Button>
+                            </Group>
+                        </Box>
+                        <Space h={'md'} />
+                        <Alerts
+                            messages={[
+                                {
+                                    condition: data !== undefined && data?.state == false,
+                                    color: AlertColors.error,
+                                    title: 'Error',
+                                    content: "There was a problem creating your support request"
+                                }
+                            ]}
+                        />
+                    </Paper>
+                </Container>
+            </Auth>
         </Layout>
     );
 }

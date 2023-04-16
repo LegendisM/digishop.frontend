@@ -7,6 +7,7 @@ import {
     IconLogout
 } from '@tabler/icons-react';
 import Layout from "@/components/layout";
+import Auth from '@/components/common/auth';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -88,18 +89,22 @@ export default function DashboardPage() {
 
     return (
         <Layout pageKey="dashboard" title="Dashboard" description="dashboard control panel">
-            <Navbar width={{ sm: 300 }} p="md">
-                <Navbar.Section grow>
-                    {links}
-                </Navbar.Section>
+            <Auth auth={true} message={true}>
+                <Navbar width={{ sm: 300 }} p="md">
+                    <Navbar.Section grow>
+                        {links}
+                    </Navbar.Section>
 
-                <Navbar.Section className={classes.footer}>
-                    <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                        <IconLogout className={classes.linkIcon} stroke={1.5} />
-                        <span>Logout</span>
-                    </a>
-                </Navbar.Section>
-            </Navbar>
+                    <Navbar.Section className={classes.footer}>
+                        <a href="#" className={classes.link} onClick={(event) => {
+                            event.preventDefault();
+                        }}>
+                            <IconLogout className={classes.linkIcon} stroke={1.5} />
+                            <span>Logout</span>
+                        </a>
+                    </Navbar.Section>
+                </Navbar>
+            </Auth>
         </Layout>
     );
 }
