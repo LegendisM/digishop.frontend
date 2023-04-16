@@ -10,6 +10,9 @@ const config: { [key: string]: { [key: string]: string } } = {
         ['find']: 'product',
         ['search']: 'product/search'
     },
+    ['support']: {
+        ['send']: 'support'
+    }
 }
 
 export function GetApiRoute(category: string, key: string): string {

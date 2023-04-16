@@ -17,7 +17,7 @@ export default function SearchPage() {
             category: 'GENERAL',
             description: '',
             page: 1,
-            limit: 10,
+            limit: 20,
         }
     });
     const [{ data, loading, error }, search] = useAxios<IProductSearchResponseDto>({

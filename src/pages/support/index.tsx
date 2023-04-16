@@ -1,25 +1,41 @@
-import Layout from '@/components/layout';
-import { TextInput, Textarea, SimpleGrid, Group, Title, Button, Container, Paper, Divider, Flex, Space } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { AxiosResponse } from 'axios';
+import { hasLength, useForm } from '@mantine/form';
 import { IconPhoneCall } from '@tabler/icons-react';
+import { TextInput, Textarea, Group, Title, Button, Container, Paper, Divider, Flex, Space, Box, LoadingOverlay } from '@mantine/core';
+import Layout from '@/components/layout';
+import { useAxios } from '@/common/service/api.service';
+import { GetApiRoute } from '@/constants/api.config';
+import { ISupportSendResponseDto } from '@/common/interfaces/support/support.dto';
+import Alerts, { AlertColors } from '@/components/common/alerts';
+import { useRouter } from 'next/router';
 
 export default function SupportPage() {
+    const router = useRouter();
     const form = useForm({
         initialValues: {
-            name: '',
-            email: '',
             subject: '',
-            message: '',
+            content: '',
         },
         validate: {
-            name: (value) => value.trim().length < 2,
-            email: (value) => !/^\S+@\S+$/.test(value),
-            subject: (value) => value.trim().length === 0,
+            subject: hasLength({ min: 2, max: 80 }),
+            content: hasLength({ min: 1, max: 255 })
         },
     });
+    const [{ data, loading, error }, send] = useAxios<ISupportSendResponseDto>({
+        url: GetApiRoute('support', 'send'),
+        method: 'POST',
+        data: form.values
+    });
+
+    const onSendResponse = (response: AxiosResponse<ISupportSendResponseDto>) => {
+        if (response.data.state) {
+            router.push('/dashboard');
+        }
+    }
 
     return (
         <Layout pageKey="support" title="Support" description="Get in touch with our powerful team">
+            <LoadingOverlay visible={loading} />
             <Container size={'sm'} my={40}>
                 <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
                     <Flex justify={'space-between'} align={'center'}>
@@ -34,51 +50,46 @@ export default function SupportPage() {
                         <IconPhoneCall />
                     </Flex>
                     <Divider mt={'xs'} mb={'xs'} />
-                    <form onSubmit={form.onSubmit(() => { })}>
-
-                        <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                            <TextInput
-                                label="Name"
-                                placeholder="Your name"
-                                name="name"
-                                variant="filled"
-                                {...form.getInputProps('name')}
-                            />
-                            <TextInput
-                                label="Email"
-                                placeholder="Your email"
-                                name="email"
-                                variant="filled"
-                                {...form.getInputProps('email')}
-                            />
-                        </SimpleGrid>
-
+                    <Box component='form' onSubmit={form.onSubmit((values) => {
+                        send().then(onSendResponse);
+                    })}>
                         <TextInput
+                            name="subject"
                             label="Subject"
                             placeholder="Subject"
                             mt="md"
-                            name="subject"
                             variant="filled"
                             {...form.getInputProps('subject')}
                         />
                         <Textarea
-                            mt="md"
+                            name="content"
                             label="Message"
                             placeholder="Your message"
                             maxRows={10}
                             minRows={5}
                             autosize
-                            name="message"
                             variant="filled"
-                            {...form.getInputProps('message')}
+                            mt="md"
+                            {...form.getInputProps('content')}
                         />
 
                         <Group position="center" mt="xl">
                             <Button type="submit" size="md">
-                                Send message
+                                Send Message
                             </Button>
                         </Group>
-                    </form>
+                    </Box>
+                    <Space h={'md'} />
+                    <Alerts
+                        messages={[
+                            {
+                                condition: data !== undefined && data?.state == false,
+                                color: AlertColors.error,
+                                title: 'Error',
+                                content: "There was a problem creating your support request"
+                            }
+                        ]}
+                    />
                 </Paper>
             </Container>
         </Layout>

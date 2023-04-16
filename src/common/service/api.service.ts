@@ -10,6 +10,7 @@ instance.interceptors.request.use(function (config) {
     let token;
     if (typeof window !== 'undefined') {
         token = localStorage.getItem('token');
+        token = token?.slice(1, token.length - 1)
     }
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
