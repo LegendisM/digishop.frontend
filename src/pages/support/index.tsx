@@ -30,7 +30,7 @@ export default function SupportPage() {
 
     const onSendResponse = (response: AxiosResponse<ISupportSendResponseDto>) => {
         if (response.data.state) {
-            router.push('/dashboard');
+            router.push('/dashboard/support');
         }
     }
 

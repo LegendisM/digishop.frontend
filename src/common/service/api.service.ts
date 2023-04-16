@@ -7,12 +7,11 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
-    let token;
-    if (typeof window !== 'undefined') {
-        token = localStorage.getItem('token');
-        token = token?.slice(1, token.length - 1)
+    let token = localStorage.getItem("token");
+    if (token) {
+        token = token?.slice(1, token.length - 1);
+        config.headers.Authorization = `Bearer ${token}`;
     }
-    config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
 }, function (error) {
     return Promise.reject(error);
@@ -21,7 +20,7 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    let status = error.response.status;
+    let status = error?.response?.status;
     if (status === 401) {
         window.location.href = '/auth/signin';
     }

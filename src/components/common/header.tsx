@@ -93,7 +93,7 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                             <Button href='/auth/signup' component='a'>Sign up</Button>
                         </Auth>
                         <Auth auth={true}>
-                            <Button href='/dashboard' component='a' variant="default">Dashboard</Button>
+                            <Button href='/dashboard' component='a' variant="default">Profile</Button>
                         </Auth>
                     </Group>
 
@@ -131,7 +131,7 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                             <Button href='/auth/signup' component='a'>Sign up</Button>
                         </Auth>
                         <Auth auth={true}>
-                            <Button href='/dashboard' component='a' variant="default">Dashboard</Button>
+                            <Button href='/dashboard' component='a' variant="default">Profile</Button>
                         </Auth>
                     </Group>
                 </ScrollArea>

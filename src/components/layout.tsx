@@ -4,7 +4,7 @@ import Footer from "./common/footer";
 import { GlobalConfig } from "@/constants/config";
 import { AppShell } from "@mantine/core";
 
-export default function Layout({ children, pageKey, title, description, head }: { children: React.ReactNode, pageKey: string, title: string, description?: string, head?: React.ReactNode }) {
+export default function Layout({ children, pageKey, title, description, head, shell }: { children: React.ReactNode, pageKey: string, title: string, description?: string, head?: React.ReactNode, shell?: { header?: any, navbar?: any, footer?: any } }) {
     return (
         <>
             <Head>
@@ -12,7 +12,7 @@ export default function Layout({ children, pageKey, title, description, head }: 
                 {description ? <meta name="description" content={description} /> : null}
                 {head}
             </Head>
-            <AppShell header={<Header pageKey={pageKey} />} footer={<Footer />} >
+            <AppShell header={shell?.header ?? <Header pageKey={pageKey} />} navbar={shell?.navbar} footer={shell?.footer ?? <Footer />} >
                 {children}
             </AppShell>
         </>
