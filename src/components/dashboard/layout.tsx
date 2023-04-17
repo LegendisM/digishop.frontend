@@ -32,13 +32,13 @@ export default function DashboardLayout({ children, label }: { children: React.R
 
     const logout = () => {
         setToken('');
-        router.push('auth/signin');
+        router.push('/auth/signin');
     }
 
     return (
         <Layout pageKey="dashboard" title={`Dashboard ${label}`} description="dashboard control panel" shell={{ header: <></>, footer: <></> }}>
             <Auth auth={true} message={true}>
-                <Navbar p="md" width={opened ? { sm: 200, lg: 300 } : { sm: 45, lg: 65 }}>
+                <Navbar p="md" width={opened ? { sm: 200, lg: 300 } : { sm: 55, lg: 65 }}>
                     <Navbar.Section>
                         <Flex className={classes.header} justify={'space-between'} align="center">
                             <MantineLogo size={28} inverted />
