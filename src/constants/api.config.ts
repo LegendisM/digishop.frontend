@@ -6,6 +6,10 @@ const config: { [key: string]: { [key: string]: string } } = {
         ['signin']: 'auth/signin',
         ['signup']: 'auth/signup'
     },
+    ['profile']: {
+        ['fetch']: 'profile',
+        ['update']: 'profile'
+    },
     ['product']: {
         ['find']: 'product',
         ['search']: 'product/search'

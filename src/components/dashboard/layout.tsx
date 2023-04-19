@@ -1,33 +1,47 @@
-import { Box, Burger, Flex, Navbar } from "@mantine/core";
+import { Box, Center, Navbar, Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import Auth from "../common/auth";
 import Layout from "../layout";
 import { IconUser, IconSettings, IconPhoneCall, IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useStyles } from "@/styles/dashboard/style";
-import { useDisclosure, useLocalStorage } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 import { MantineLogo } from "@mantine/ds";
 
+interface NavbarLinkProps {
+    icon: React.FC<any>;
+    label: string;
+    active?: boolean;
+    onClick?(): void;
+}
+
+function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
+    const { classes, cx } = useStyles();
+    return (
+        <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
+            <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
+                <Icon size="1.2rem" stroke={1.5} />
+            </UnstyledButton>
+        </Tooltip>
+    );
+}
+
 const pages = [
-    { link: '', label: 'Profile', icon: IconUser },
-    { link: 'product', label: 'Product', icon: IconSettings },
-    { link: 'support', label: 'Support', icon: IconPhoneCall },
+    { link: '/dashboard', label: 'Profile', icon: IconUser },
+    { link: '/dashboard/product', label: 'Product', icon: IconSettings },
+    { link: '/dashboard/support', label: 'Support', icon: IconPhoneCall },
 ];
 
 export default function DashboardLayout({ children, label }: { children: React.ReactNode, label: string }) {
     const router = useRouter();
-    const { classes, cx } = useStyles();
-    const [opened, { toggle }] = useDisclosure(true);
     const [token, setToken] = useLocalStorage({ key: 'token' });
 
-    const links = pages.map((item) => (
-        <a
+    const links = pages.map((item, index) => (
+        <NavbarLink
+            {...item}
             key={item.label}
-            className={cx(classes.link, { [classes.linkActive]: item.label === label })}
-            href={`/dashboard/${item.link}`}
-        >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
-        </a>
+            active={item.label === label}
+            onClick={() => router.push(item.link)}
+        />
     ));
 
     const logout = () => {
@@ -38,23 +52,22 @@ export default function DashboardLayout({ children, label }: { children: React.R
     return (
         <Layout pageKey="dashboard" title={`Dashboard ${label}`} description="dashboard control panel" shell={{ header: <></>, footer: <></> }}>
             <Auth auth={true} message={true}>
-                <Navbar p="md" width={opened ? { sm: 200, lg: 300 } : { sm: 55, lg: 65 }}>
+                <Navbar width={{ base: 80 }} p="md">
+                    <Center>
+                        <MantineLogo type="mark" size={30} />
+                    </Center>
+
+                    <Navbar.Section grow mt={50}>
+                        <Stack justify="center" spacing={0}>
+                            {links}
+                        </Stack>
+                    </Navbar.Section>
+
                     <Navbar.Section>
-                        <Flex className={classes.header} justify={'space-between'} align="center">
-                            <MantineLogo size={28} inverted />
-                            <Burger opened={opened} onClick={toggle}></Burger>
-                        </Flex>
-                    </Navbar.Section>
-
-                    <Navbar.Section grow hidden={!opened}>
-                        {links}
-                    </Navbar.Section>
-
-                    <Navbar.Section className={classes.footer} hidden={!opened}>
-                        <Box component='a' className={classes.link} onClick={logout}>
-                            <IconLogout className={classes.linkIcon} stroke={1.5} />
-                            <span>Logout</span>
-                        </Box>
+                        <Stack justify="center" spacing={0}>
+                            {/* <NavbarLink icon={IconSwitchHorizontal} label="Change account" /> */}
+                            <NavbarLink icon={IconLogout} label="Logout" onClick={logout} />
+                        </Stack>
                     </Navbar.Section>
                 </Navbar>
                 <Box>
