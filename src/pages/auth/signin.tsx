@@ -3,7 +3,7 @@ import { Anchor, Button, Container, Paper, PasswordInput, TextInput, Title, Text
 import { hasLength, useForm } from "@mantine/form";
 import { useAxios } from "@/common/service/api.service";
 import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
-import { GetApiRoute } from "@/constants/api.config";
+import { GET_API_ROUTE } from "@/constants/api.config";
 import Alerts, { AlertColors } from "@/components/common/alerts";
 import { AxiosResponse } from "axios";
 import { useState } from "react";
@@ -23,7 +23,7 @@ export default function SignInPage() {
         }
     });
     const [{ data, loading, error }, signin] = useAxios<IAuthResponseDto>({
-        url: GetApiRoute('auth', 'signin'),
+        url: GET_API_ROUTE('auth', 'signin'),
         method: 'POST',
         data: form.values
     });

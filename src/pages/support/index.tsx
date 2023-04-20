@@ -4,7 +4,7 @@ import { IconPhoneCall } from '@tabler/icons-react';
 import { TextInput, Textarea, Group, Title, Button, Container, Paper, Divider, Flex, Space, Box, LoadingOverlay } from '@mantine/core';
 import Layout from '@/components/layout';
 import { useAxios } from '@/common/service/api.service';
-import { GetApiRoute } from '@/constants/api.config';
+import { GET_API_ROUTE } from '@/constants/api.config';
 import { ISupportSendResponseDto } from '@/common/interfaces/support/support.dto';
 import Alerts, { AlertColors } from '@/components/common/alerts';
 import { useRouter } from 'next/router';
@@ -23,7 +23,7 @@ export default function SupportPage() {
         },
     });
     const [{ data, loading, error }, send] = useAxios<ISupportSendResponseDto>({
-        url: GetApiRoute('support', 'send'),
+        url: GET_API_ROUTE('support', 'send'),
         method: 'POST',
         data: form.values
     });

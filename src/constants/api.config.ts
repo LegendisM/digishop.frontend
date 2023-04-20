@@ -1,6 +1,6 @@
 const config: { [key: string]: { [key: string]: string } } = {
     ["main"]: {
-        ['base']: 'http://127.0.0.1:80/api/v1'
+        ['base']: 'http://127.0.0.1/api/v1'
     },
     ['auth']: {
         ['signin']: 'auth/signin',
@@ -19,6 +19,6 @@ const config: { [key: string]: { [key: string]: string } } = {
     }
 }
 
-export function GetApiRoute(category: string, key: string): string {
+export function GET_API_ROUTE(category: string, key: string): string {
     return config[category][key];
 }

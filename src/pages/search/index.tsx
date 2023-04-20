@@ -3,7 +3,7 @@ import { ProductCategories } from "@/common/interfaces/product/product.interface
 import { useAxios } from "@/common/service/api.service";
 import Product from "@/components/home/product";
 import Layout from "@/components/layout";
-import { GetApiRoute } from "@/constants/api.config";
+import { GET_API_ROUTE } from "@/constants/api.config";
 import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space, Box, LoadingOverlay, Select, Modal, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -22,7 +22,7 @@ export default function SearchPage() {
     });
     const [{ data, loading, error }, search] = useAxios<IProductSearchResponseDto>({
         method: 'GET',
-        url: GetApiRoute('product', 'search'),
+        url: GET_API_ROUTE('product', 'search'),
         params: form.values
     }, { manual: true });
 

@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import _ from "lodash";
+import { useEffect, useState } from "react";
 import { useForm, hasLength, isEmail } from "@mantine/form";
-import { Avatar, Button, SimpleGrid, Paper, Space, TextInput, Container, Divider, Flex, Box, LoadingOverlay } from "@mantine/core";
-import { GetApiRoute } from "@/constants/api.config";
+import { Avatar, Button, SimpleGrid, Paper, Space, Text, TextInput, Container, Divider, Flex, Box, LoadingOverlay, FileButton } from "@mantine/core";
+import { UPLOADS_STORAGE } from "@/constants/config";
+import { GET_API_ROUTE } from "@/constants/api.config";
 import { useAxios } from "@/common/service/api.service";
 import DashboardLayout from "@/components/dashboard/layout";
 import Alerts, { AlertColors } from "@/components/common/alerts";
 import { IProfileFetchResponseDto, IProfileUpdateResponseDto } from "@/common/interfaces/profile/profile.dto";
 
 export default function ProfilePage() {
+    const [file, setFile] = useState<File | null>(null);
     const form = useForm({
         initialValues: {
             username: '',
@@ -20,35 +23,62 @@ export default function ProfilePage() {
             nationalcode: hasLength({ min: 10, max: 10 }, 'National Code must be 10 characters long')
         }
     });
-    const [{ data: fetchData, loading: fetchLoading, error: fetchError }] = useAxios<IProfileFetchResponseDto>({
-        url: GetApiRoute('profile', 'fetch'),
+    const [{ data: fetchData, loading: fetchLoading, error: fetchError }, fetch] = useAxios<IProfileFetchResponseDto>({
+        url: GET_API_ROUTE('profile', 'fetch'),
         method: 'GET'
     }, { manual: false });
-    const [{ data: updateData, loading: updaeLoading }, update] = useAxios<IProfileUpdateResponseDto>({
-        url: GetApiRoute('profile', 'update'),
-        method: 'PUT',
-        data: form.values
+    const [{ data: updateData, loading: updaeLoading, error: updateError }, update] = useAxios<IProfileUpdateResponseDto>({
+        url: GET_API_ROUTE('profile', 'update'),
+        method: 'PUT'
     });
 
     useEffect(() => {
         if (fetchData) {
-            form.setValues(fetchData);
+            form.setValues(_.omit(fetchData, ['avatar']));
         }
     }, [fetchData]);
+
+    useEffect(() => {
+        if (updateData?.state && file) {
+            fetch();
+            setFile(null);
+        }
+    }, [updateData])
+
+    const onSubmit = () => {
+        let formData = new FormData();
+        formData.append('username', form.values.username);
+        formData.append('email', form.values.email);
+        formData.append('nationalcode', form.values.nationalcode);
+        if (file) {
+            formData.set('avatar', file);
+        }
+        update({ data: formData });
+    }
 
     return (
         <DashboardLayout label="Profile">
             <LoadingOverlay visible={fetchLoading || updaeLoading} />
             <Container size={'md'}>
                 <Paper p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
-                    <Box component="form" onSubmit={form.onSubmit((values) => {
-                        update();
-                    })}>
-
+                    <Box component="form" onSubmit={form.onSubmit(onSubmit)}>
                         <Flex justify={'space-between'} align={'center'}>
-                            <Avatar src={fetchData?.avatar} size={'xl'} radius={'sm'} />
-                            <Space w={'sm'} />
-                            <Button variant="default" size="xs" >Select</Button>
+                            <Avatar src={fetchData?.avatar ? `${UPLOADS_STORAGE}/avatars/${fetchData.avatar}` : null} size={'xl'} radius={'sm'} />
+                            {file && (
+                                <Box>
+                                    <Text size="sm" align="center" mt="sm" color="green">
+                                        Picked Avatar: {file.name}
+                                    </Text>
+                                    <Text size="xs" align="center" color="grey">
+                                        Press <Text color="green" fw={'bold'} display={'contents'}>Save</Text> will upload your avatar
+                                    </Text>
+                                </Box>
+                            )}
+                            <FileButton onChange={(data) => {
+                                setFile(data);
+                            }} accept="image/png,image/jpg,image/jpeg">
+                                {(props) => <Button variant="default" size="xs" {...props}>Select Avatar</Button>}
+                            </FileButton>
                         </Flex>
                         <Divider my={'sm'} />
                         <SimpleGrid cols={2}>
@@ -96,6 +126,18 @@ export default function ProfilePage() {
                                 color: updateData?.state ? AlertColors.success : AlertColors.error,
                                 title: 'Info',
                                 content: updateData?.message ?? 'Invalid Message'
+                            },
+                            {
+                                condition: fetchError != undefined,
+                                color: AlertColors.error,
+                                title: "Error",
+                                content: fetchError?.message ?? "Invalid Message"
+                            },
+                            {
+                                condition: updateError != undefined,
+                                color: AlertColors.error,
+                                title: "Error",
+                                content: updateError?.message ?? "Invalid Message"
                             },
                         ]}
                     />

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { makeUseAxios } from "axios-hooks";
-import { GetApiRoute } from "@/constants/api.config";
+import { GET_API_ROUTE } from "@/constants/api.config";
 
 const instance = axios.create({
-    baseURL: GetApiRoute('main', 'base')
+    baseURL: GET_API_ROUTE('main', 'base')
 });
 
 instance.interceptors.request.use(function (config) {
@@ -25,7 +25,10 @@ instance.interceptors.response.use(function (response) {
 }, function (error) {
     let status = error?.response?.status;
     if (status === 401) {
-        window.location.href = '/auth/signin';
+        if (typeof window !== 'undefined') {
+            window.location.href = '/auth/signin';
+        }
+        return;
     }
     return Promise.reject(error);
 });
