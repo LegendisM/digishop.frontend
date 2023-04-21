@@ -7,7 +7,7 @@ export default function Product({ data }: { data: IProduct }) {
         <Card shadow="sm" padding="sm" radius="md" miw={"300px"} withBorder>
             <Card.Section>
                 <Image
-                    src={data.image}
+                    src={data.cover}
                     height={200}
                     fit="cover"
                     alt={`Product ${data.name} Image`}
@@ -16,9 +16,9 @@ export default function Product({ data }: { data: IProduct }) {
 
             <Group position="apart" mt="sm" mb="xs">
                 <Text weight={500}>{data.name}</Text>
-                <Badge color="green" variant="light">
-                    {data.category}
-                </Badge>
+                <Group position="right">
+                    {data.category.map((value, index) => (<Badge color={index % 2 == 0 ? "green" : "yellow"} variant="light">{value}</Badge>))}
+                </Group>
             </Group>
 
             <Text size="sm" color="dimmed">
