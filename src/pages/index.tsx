@@ -7,13 +7,13 @@ export default function HomePage() {
     <Layout pageKey='home' title="Home" description={GLOBAL_CONFIG.description}>
       <ProductCategory
         title='General'
-        category='GENERAL'
+        category='General'
         description='test description'
         limit={8}
       />
       <ProductCategory
         title='Special'
-        category='SPECIAL'
+        category='Special'
         description='test description 2'
         limit={8}
       />

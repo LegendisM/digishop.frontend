@@ -7,8 +7,8 @@ import { IProductFindResponseDto } from '@/common/interfaces/product/product.dto
 export default function ProductCategory({ title, category, description, limit }: { title: string, category: string, description: string, limit: number }) {
     const [{ data, loading, error }] = useAxios<IProductFindResponseDto>({
         url: GET_API_ROUTE('product', 'find'),
-        method: 'GET',
-        params: { category, page: 1, limit },
+        method: 'POST',
+        data: { name: "", category: [category], description: "", page: 1, limit },
     }, { manual: false });
 
     return (

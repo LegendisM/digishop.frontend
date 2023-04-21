@@ -1,29 +1,30 @@
-import { IProductSearchResponseDto } from "@/common/interfaces/product/product.dto";
-import { ProductCategories } from "@/common/interfaces/product/product.interface";
-import { useAxios } from "@/common/service/api.service";
-import Product from "@/components/home/product";
-import Layout from "@/components/layout";
-import { GET_API_ROUTE } from "@/constants/api.config";
-import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space, Box, LoadingOverlay, Select, Modal, Text } from "@mantine/core";
+import { useState } from "react";
+import { Container, TextInput, Button, Paper, Title, Divider, Flex, Space, Box, LoadingOverlay, Modal, Text, MultiSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
+import Layout from "@/components/layout";
+import Product from "@/components/home/product";
+import { useAxios } from "@/common/service/api.service";
+import { GET_API_ROUTE } from "@/constants/api.config";
+import { IProductSearchResponseDto } from "@/common/interfaces/product/product.dto";
 
 export default function SearchPage() {
+    const [selectedCategories, setSelectedCategories] = useState<{ value: string, label: string }[]>([]);
     const [opened, { open, close }] = useDisclosure(false);
     const form = useForm({
         initialValues: {
             name: '',
-            category: 'GENERAL',
+            category: [''],
             description: '',
             page: 1,
             limit: 20,
         }
     });
     const [{ data, loading, error }, search] = useAxios<IProductSearchResponseDto>({
-        method: 'GET',
-        url: GET_API_ROUTE('product', 'search'),
-        params: form.values
+        method: 'POST',
+        url: GET_API_ROUTE('product', 'find'),
+        data: form.values
     }, { manual: true });
 
     const onSearchResponse = () => {
@@ -50,14 +51,19 @@ export default function SearchPage() {
                     <Box component={'form'} onSubmit={form.onSubmit((values) => {
                         search().then(onSearchResponse);
                     })}>
-                        <Select
+                        <MultiSelect
                             name="category"
                             label="Category"
-                            placeholder="Enter category"
-                            data={Object.values(ProductCategories).map((category) => ({
-                                label: category,
-                                value: category.toUpperCase()
-                            }))}
+                            data={selectedCategories}
+                            placeholder="Select Categories"
+                            searchable
+                            creatable
+                            getCreateLabel={(query: any) => `+ Create ${query}`}
+                            onCreate={(query: any) => {
+                                const item = { value: query, label: query };
+                                setSelectedCategories((current: any) => [...current, item]);
+                                return item;
+                            }}
                             {...form.getInputProps('category')}
                         />
                         <TextInput
