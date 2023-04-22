@@ -7,7 +7,7 @@ import Layout from "@/components/layout";
 import Product from "@/components/home/product";
 import { useAxios } from "@/common/service/api.service";
 import { GET_API_ROUTE } from "@/constants/api.config";
-import { IProductSearchResponseDto } from "@/common/interfaces/product/product.dto";
+import { IProductFindResponseDto } from "@/common/interfaces/product/product.dto";
 
 export default function SearchPage() {
     const [selectedCategories, setSelectedCategories] = useState<{ value: string, label: string }[]>([]);
@@ -21,7 +21,7 @@ export default function SearchPage() {
             limit: 20,
         }
     });
-    const [{ data, loading, error }, search] = useAxios<IProductSearchResponseDto>({
+    const [{ data, loading, error }, search] = useAxios<IProductFindResponseDto>({
         method: 'POST',
         url: GET_API_ROUTE('product', 'find'),
         data: form.values

@@ -11,7 +11,8 @@ const config: { [key: string]: { [key: string]: string } } = {
         ['update']: 'profile'
     },
     ['product']: {
-        ['find']: 'product'
+        ['find']: 'product/find',
+        ['create']: 'product'
     },
     ['support']: {
         ['send']: 'support'

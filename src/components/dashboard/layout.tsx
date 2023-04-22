@@ -1,7 +1,7 @@
 import { Box, Center, Navbar, Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import Auth from "../common/auth";
 import Layout from "../layout";
-import { IconUser, IconSettings, IconPhoneCall, IconLogout } from "@tabler/icons-react";
+import { IconUser, IconSettings, IconPhoneCall, IconLogout, IconBackspace } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useStyles } from "@/styles/dashboard/style";
 import { useLocalStorage } from "@mantine/hooks";
@@ -44,7 +44,11 @@ export default function DashboardLayout({ children, label }: { children: React.R
         />
     ));
 
-    const logout = () => {
+    const onBack = () => {
+        router.push('/');
+    }
+
+    const onLogout = () => {
         setToken('');
         router.push('/auth/signin');
     }
@@ -65,8 +69,8 @@ export default function DashboardLayout({ children, label }: { children: React.R
 
                     <Navbar.Section>
                         <Stack justify="center" spacing={0}>
-                            {/* <NavbarLink icon={IconSwitchHorizontal} label="Change account" /> */}
-                            <NavbarLink icon={IconLogout} label="Logout" onClick={logout} />
+                            <NavbarLink icon={IconBackspace} label="Back" onClick={onBack} />
+                            <NavbarLink icon={IconLogout} label="Logout" onClick={onLogout} />
                         </Stack>
                     </Navbar.Section>
                 </Navbar>
