@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/layout";
-import { Button, Container, Flex, Group, LoadingOverlay, Pagination, Paper, Space, Title, Text, Modal, Box, TextInput, NumberInput, MultiSelect, Badge, Table } from "@mantine/core";
+import { Button, Container, Flex, Group, LoadingOverlay, Pagination, Paper, Space, Title, Modal, Box, TextInput, NumberInput, MultiSelect, Badge, Table } from "@mantine/core";
 import { useAxios } from "@/common/service/api.service";
 import { IProductFindResponseDto } from "@/common/interfaces/product/product.dto";
 import { GET_API_ROUTE } from "@/constants/api.config";
@@ -9,16 +9,18 @@ import { useDisclosure } from "@mantine/hooks";
 import { hasLength, useForm } from "@mantine/form";
 import { IProduct } from "@/common/interfaces/product/product.interface";
 import { AxiosResponse } from "axios";
+import _ from "lodash";
 
 export default function ProductPage() {
     const limit = 10;
+    const [actionMode, setActionMode] = useState<"Create" | "Edit">("Create");
     const [activePage, setActivePage] = useState(1);
     const [opened, { open, close }] = useDisclosure(false);
     const [selectedCategories, setSelectedCategories] = useState<{ value: string, label: string }[]>([]);
     const form = useForm({
         initialValues: {
             name: '',
-            category: [''],
+            category: ['General'],
             description: '',
             price: 1,
             stock: 1
@@ -28,35 +30,64 @@ export default function ProductPage() {
             'description': hasLength({ min: 1, max: 250 })
         }
     });
-    const [{ data: fetchData, loading: fetchLoading, error: fetchError }, fetch] = useAxios<IProductFindResponseDto>({
+    const [{ data: fetchData, loading: fetchLoading, error: fetchError }, fetchProducts] = useAxios<IProductFindResponseDto>({
         url: GET_API_ROUTE('product', 'find'),
         method: 'POST',
         data: { name: "", category: [], description: "", page: activePage, limit },
     }, { manual: false });
-    const [{ data: createData, loading: createLoading, error: createError }, create] = useAxios<IProduct>({
-        url: GET_API_ROUTE('product', 'create'),
-        method: 'POST',
+    const [{ loading: productActionLoading }, productAction] = useAxios<IProduct>({
+        url: GET_API_ROUTE('product', 'create/update'),
         data: form.values
     });
+    const [{ loading: productDeleteLoading }, deleteProduct] = useAxios<{ state: boolean }>({
+        url: GET_API_ROUTE('product', 'delete'),
+        method: 'DELETE'
+    });
 
-    const onCreateResponse = (response: AxiosResponse<IProduct>) => {
-        if (response.data?._id) {
-            form.reset();
-            close();
-            fetch();
-        }
+    const onProductNew = () => {
+        form.reset();
+        setActionMode("Create");
+        open();
     }
+
+    const onProductEdit = (product: IProduct) => {
+        form.setValues(_.pick(product, ['name', 'category', 'description', 'price', 'stock']));
+        form.setFieldValue('id', product._id);
+        setActionMode("Edit");
+        open();
+    }
+
+    const onProductDelete = ({ _id: id }: IProduct) => {
+        deleteProduct({ data: { id } }).then((response: AxiosResponse<{ state: boolean }>) => {
+            if (response.data.state) {
+                fetchProducts();
+            }
+        });
+    }
+
+    const onProductActionResponse = (response: AxiosResponse<IProduct>) => {
+        form.reset();
+        close();
+        fetchProducts();
+    }
+
+    useEffect(() => {
+        setSelectedCategories(form.values.category.map((value) => ({ label: value, value })));
+        if (!opened) {
+            setActionMode("Create");
+        }
+    }, [opened]);
 
     return (
         <DashboardLayout label="Product">
-            <LoadingOverlay visible={fetchLoading || createLoading} />
+            <LoadingOverlay visible={fetchLoading || productActionLoading || productDeleteLoading} />
             <Container fluid>
                 <Paper p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
                     <Flex justify={'space-between'} align={'center'}>
                         <Title sx={{ fontSize: '1.05rem' }}>
                             Product Management
                         </Title>
-                        <Button leftIcon={<IconSettings />} variant={'default'} onClick={open}>New</Button>
+                        <Button leftIcon={<IconSettings />} variant={'default'} onClick={onProductNew}>New</Button>
                     </Flex>
                     <Space h={'md'} />
                     <div style={{ overflowX: 'auto' }}>
@@ -86,8 +117,8 @@ export default function ProductPage() {
                                             </td>
                                             <td width={'180px'}>
                                                 <Group position="center">
-                                                    <Button variant="light">Edit</Button>
-                                                    <Button variant="light" color="red">Delete</Button>
+                                                    <Button variant="light" onClick={() => onProductEdit(product)}>Edit</Button>
+                                                    <Button variant="light" color="red" onClick={() => onProductDelete(product)}>Delete</Button>
                                                 </Group>
                                             </td>
                                         </tr>
@@ -101,9 +132,11 @@ export default function ProductPage() {
                     </Group>
                 </Paper>
             </Container>
-            <Modal opened={opened} size={'lg'} onClose={close} title={"Create Product"}>
+            <Modal opened={opened} size={'lg'} onClose={close} title={`${actionMode} Product`}>
                 <Box component={"form"} onSubmit={form.onSubmit((values) => {
-                    create().then(onCreateResponse);
+                    productAction({
+                        method: actionMode == "Create" ? "POST" : "PUT"
+                    }).then(onProductActionResponse);
                 })}>
                     <TextInput
                         name="name"
@@ -154,7 +187,7 @@ export default function ProductPage() {
                         {...form.getInputProps('stock')}
                     />
                     <Button type={"submit"} mt={"xl"} fullWidth>
-                        Create
+                        Submit
                     </Button>
                 </Box>
             </Modal>
