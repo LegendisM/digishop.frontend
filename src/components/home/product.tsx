@@ -1,4 +1,5 @@
 import { IProduct } from "@/common/interfaces/product/product.interface";
+import { UPLOADS_STORAGE } from "@/constants/config";
 import { Badge, Button, Card, Group, Text, Image, Box } from "@mantine/core";
 import { IconCash, IconTextCaption } from "@tabler/icons-react";
 
@@ -7,7 +8,7 @@ export default function Product({ data }: { data: IProduct }) {
         <Card shadow="sm" padding="sm" radius="md" miw={"300px"} withBorder>
             <Card.Section>
                 <Image
-                    src={data.cover}
+                    src={`${UPLOADS_STORAGE}/products/${data.cover}`}
                     height={200}
                     fit="cover"
                     alt={`Product ${data.name} Image`}

@@ -8,6 +8,7 @@ import { useAxios } from "@/common/service/api.service";
 import DashboardLayout from "@/components/dashboard/layout";
 import Alerts, { AlertColors } from "@/components/common/alerts";
 import { IProfileFetchResponseDto, IProfileUpdateResponseDto } from "@/common/interfaces/profile/profile.dto";
+import { JsonToFormData } from "@/common/helpers/form.helpers";
 
 export default function ProfilePage() {
     const [file, setFile] = useState<File | null>(null);
@@ -46,10 +47,7 @@ export default function ProfilePage() {
     }, [updateData])
 
     const onSubmit = () => {
-        let formData = new FormData();
-        formData.append('username', form.values.username);
-        formData.append('email', form.values.email);
-        formData.append('nationalcode', form.values.nationalcode);
+        let formData = JsonToFormData(form.values);
         if (file) {
             formData.set('avatar', file);
         }

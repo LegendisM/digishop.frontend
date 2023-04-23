@@ -1,26 +1,29 @@
+import _ from "lodash";
 import { useContext, useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/layout";
-import { Button, Container, Flex, Group, LoadingOverlay, Pagination, Paper, Space, Title, Modal, Box, TextInput, NumberInput, MultiSelect, Badge, Table } from "@mantine/core";
+import { Button, Container, Flex, Group, LoadingOverlay, Pagination, Paper, Space, Title, Modal, Box, TextInput, NumberInput, MultiSelect, Badge, Table, FileInput, rem } from "@mantine/core";
 import { useAxios } from "@/common/service/api.service";
 import { IProductFindResponseDto } from "@/common/interfaces/product/product.dto";
 import { GET_API_ROUTE } from "@/constants/api.config";
-import { IconSettings } from "@tabler/icons-react";
+import { IconSettings, IconUpload } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { hasLength, useForm } from "@mantine/form";
 import { IProduct } from "@/common/interfaces/product/product.interface";
 import { AxiosResponse } from "axios";
-import _ from "lodash";
 import { AuthContext } from "@/components/common/auth";
+import { JsonToFormData } from "@/common/helpers/form.helpers";
 
 export default function ProductPage() {
-    const { auth, user } = useContext(AuthContext);
     const limit = 10;
+    const { auth, user } = useContext(AuthContext);
+    const [file, setFile] = useState<File | null>(null);
     const [actionMode, setActionMode] = useState<"Create" | "Edit">("Create");
     const [activePage, setActivePage] = useState(1);
     const [opened, { open, close }] = useDisclosure(false);
     const [selectedCategories, setSelectedCategories] = useState<{ value: string, label: string }[]>([]);
     const form = useForm({
         initialValues: {
+            id: '',
             name: '',
             category: ['General'],
             description: '',
@@ -41,8 +44,7 @@ export default function ProductPage() {
         },
     }, { manual: false });
     const [{ loading: productActionLoading }, productAction] = useAxios<IProduct>({
-        url: GET_API_ROUTE('product', 'create/update'),
-        data: form.values
+        url: GET_API_ROUTE('product', 'create/update')
     });
     const [{ loading: productDeleteLoading }, deleteProduct] = useAxios<{ state: boolean }>({
         url: GET_API_ROUTE('product', 'delete'),
@@ -72,6 +74,7 @@ export default function ProductPage() {
 
     const onProductActionResponse = () => {
         form.reset();
+        setFile(null);
         close();
         fetchProducts();
     }
@@ -139,15 +142,33 @@ export default function ProductPage() {
             </Container>
             <Modal opened={opened} size={'lg'} onClose={close} title={`${actionMode} Product`}>
                 <Box component={"form"} onSubmit={form.onSubmit((values) => {
+                    let formData = JsonToFormData(form.values);
+                    let category = form.values.category.join(',');
+                    formData.set('category', category);
+                    if (actionMode == "Create" && file) {
+                        formData.set('cover', file);
+                    }
                     productAction({
-                        method: actionMode == "Create" ? "POST" : "PUT"
+                        method: actionMode == "Create" ? "POST" : "PUT",
+                        data: actionMode == "Create" ? formData : ({ ...form.values, ...{ category, price: form.values.price.toString(), stock: form.values.stock.toString() } })
                     }).then(onProductActionResponse).catch(onProductActionResponse);
                 })}>
+                    {actionMode == "Create" ? <FileInput
+                        name="cover"
+                        label="Cover"
+                        placeholder="Pick image"
+                        required
+                        withAsterisk
+                        value={file}
+                        onChange={setFile}
+                        icon={<IconUpload size={rem(14)} />}
+                    /> : null}
                     <TextInput
                         name="name"
                         label="Name"
                         placeholder="Enter name"
                         required
+                        mt={'md'}
                         {...form.getInputProps('name')}
                     />
                     <MultiSelect
@@ -196,6 +217,6 @@ export default function ProductPage() {
                     </Button>
                 </Box>
             </Modal>
-        </DashboardLayout>
+        </DashboardLayout >
     );
 }

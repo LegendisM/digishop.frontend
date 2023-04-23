@@ -37,7 +37,7 @@ export function AuthProvider(data: { children: React.ReactNode }) {
     )
 }
 
-export default function Auth(data: { children: React.ReactNode, auth: boolean, roles?: string[], message?: boolean }) { // TODO: roles input to check roles of users
+export default function Auth(data: { children: React.ReactNode, auth: boolean, roles?: string[], message?: boolean }) {
     const { roles = [] } = data;
     const { auth, user } = useContext(AuthContext);
 
