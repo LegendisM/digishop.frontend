@@ -12,6 +12,7 @@ import { JsonToFormData } from "@/common/helpers/form.helpers";
 import { AxiosResponse } from "axios";
 
 export default function ProfilePage() {
+    const [fileError, setFileError] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const form = useForm({
         initialValues: {
@@ -63,7 +64,7 @@ export default function ProfilePage() {
                     <Box component="form" onSubmit={form.onSubmit(onSubmit)}>
                         <Flex justify={'space-between'} align={'center'}>
                             <Avatar src={fetchData?.avatar ? `${UPLOADS_STORAGE}/avatars/${fetchData.avatar}` : null} size={'xl'} radius={'sm'} />
-                            {file && (
+                            {(file && !fileError) && (
                                 <Box>
                                     <Text size="sm" align="center" mt="sm" color="green">
                                         Picked Avatar: {file.name}
@@ -73,8 +74,26 @@ export default function ProfilePage() {
                                     </Text>
                                 </Box>
                             )}
+                            {(fileError) && (
+                                <Box>
+                                    <Text size="sm" align="center" mt="sm" color="red">
+                                        {fileError}
+                                    </Text>
+                                </Box>
+                            )}
                             <FileButton onChange={(data) => {
-                                setFile(data);
+                                if (data) {
+                                    if (data.size <= 1024 * 1000 * 5) {
+                                        setFileError(null);
+                                        setFile(data);
+                                    } else {
+                                        setFile(null);
+                                        setFileError('The file size is more than 5 MB');
+                                    }
+                                } else {
+                                    setFileError(null);
+                                    setFile(null);
+                                }
                             }} accept="image/png,image/jpg,image/jpeg">
                                 {(props) => <Button variant="default" size="xs" {...props}>Select Avatar</Button>}
                             </FileButton>
