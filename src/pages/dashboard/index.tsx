@@ -9,6 +9,7 @@ import DashboardLayout from "@/components/dashboard/layout";
 import Alerts, { AlertColors } from "@/components/common/alerts";
 import { IProfileFetchResponseDto, IProfileUpdateResponseDto } from "@/common/interfaces/profile/profile.dto";
 import { JsonToFormData } from "@/common/helpers/form.helpers";
+import { AxiosResponse } from "axios";
 
 export default function ProfilePage() {
     const [file, setFile] = useState<File | null>(null);
@@ -39,19 +40,19 @@ export default function ProfilePage() {
         }
     }, [fetchData]);
 
-    useEffect(() => {
-        if (updateData?.state && file) {
-            fetch();
+    const onUpdate = (response: AxiosResponse<IProfileUpdateResponseDto>) => {
+        if (response.data.state) {
             setFile(null);
+            fetch();
         }
-    }, [updateData])
+    }
 
     const onSubmit = () => {
         let formData = JsonToFormData(form.values);
         if (file) {
             formData.set('avatar', file);
         }
-        update({ data: formData });
+        update({ data: formData }).then(onUpdate);
     }
 
     return (
