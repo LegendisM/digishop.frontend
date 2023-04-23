@@ -6,11 +6,13 @@ import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
 import { GET_API_ROUTE } from "@/constants/api.config";
 import Alerts, { AlertColors } from "@/components/common/alerts";
 import { AxiosResponse } from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
+import { AuthContext } from "@/components/common/auth";
 
 export default function SignUpPage() {
+    const { onEvent } = useContext(AuthContext);
     const router = useRouter();
     const form = useForm({
         initialValues: {
@@ -33,6 +35,7 @@ export default function SignUpPage() {
     const onSignupResponse = (response: AxiosResponse<IAuthResponseDto>) => {
         if (response.data.state) {
             setToken(response.data.token);
+            onEvent('SIGNIN');
             setOverlay(true);
             setTimeout(() => {
                 router.push("/");

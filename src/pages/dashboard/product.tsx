@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/layout";
 import { Button, Container, Flex, Group, LoadingOverlay, Pagination, Paper, Space, Title, Modal, Box, TextInput, NumberInput, MultiSelect, Badge, Table } from "@mantine/core";
 import { useAxios } from "@/common/service/api.service";
@@ -10,8 +10,10 @@ import { hasLength, useForm } from "@mantine/form";
 import { IProduct } from "@/common/interfaces/product/product.interface";
 import { AxiosResponse } from "axios";
 import _ from "lodash";
+import { AuthContext } from "@/components/common/auth";
 
 export default function ProductPage() {
+    const { auth, user } = useContext(AuthContext);
     const limit = 10;
     const [actionMode, setActionMode] = useState<"Create" | "Edit">("Create");
     const [activePage, setActivePage] = useState(1);
@@ -33,7 +35,10 @@ export default function ProductPage() {
     const [{ data: fetchData, loading: fetchLoading, error: fetchError }, fetchProducts] = useAxios<IProductFindResponseDto>({
         url: GET_API_ROUTE('product', 'find'),
         method: 'POST',
-        data: { name: "", category: [], description: "", page: activePage, limit },
+        data: {
+            ...{ name: "", category: [], description: "", page: activePage, limit },
+            ...(user?.roles.includes('ADMIN') ? {} : { owner: user?.id })
+        },
     }, { manual: false });
     const [{ loading: productActionLoading }, productAction] = useAxios<IProduct>({
         url: GET_API_ROUTE('product', 'create/update'),
@@ -65,7 +70,7 @@ export default function ProductPage() {
         });
     }
 
-    const onProductActionResponse = (response: AxiosResponse<IProduct>) => {
+    const onProductActionResponse = () => {
         form.reset();
         close();
         fetchProducts();
@@ -104,15 +109,15 @@ export default function ProductPage() {
                             </thead>
                             <tbody>
                                 {fetchData ? <>
-                                    {fetchData.products.map((product) => (
-                                        <tr>
+                                    {fetchData.products.map((product, i) => (
+                                        <tr key={i}>
                                             <td>{product.name}</td>
                                             <td>{product.description}</td>
                                             <td width={'200px'}>{product.price}</td>
                                             <td width={'200px'}>{product.stock}</td>
                                             <td width={'255px'}>
                                                 <Group>
-                                                    {product.category.map((value, index) => (<Badge color={index % 2 == 0 ? "green" : "yellow"} variant="light">{value}</Badge>))}
+                                                    {product.category.map((value, index) => (<Badge key={index} color={index % 2 == 0 ? "green" : "yellow"} variant="light">{value}</Badge>))}
                                                 </Group>
                                             </td>
                                             <td width={'180px'}>
@@ -136,7 +141,7 @@ export default function ProductPage() {
                 <Box component={"form"} onSubmit={form.onSubmit((values) => {
                     productAction({
                         method: actionMode == "Create" ? "POST" : "PUT"
-                    }).then(onProductActionResponse);
+                    }).then(onProductActionResponse).catch(onProductActionResponse);
                 })}>
                     <TextInput
                         name="name"

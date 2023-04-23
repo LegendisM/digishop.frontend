@@ -1,11 +1,12 @@
 import { Box, Center, Navbar, Stack, Tooltip, UnstyledButton } from "@mantine/core";
-import Auth from "../common/auth";
+import Auth, { AuthContext } from "../common/auth";
 import Layout from "../layout";
 import { IconUser, IconSettings, IconPhoneCall, IconLogout, IconBackspace } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useStyles } from "@/styles/dashboard/style";
 import { useLocalStorage } from "@mantine/hooks";
 import { MantineLogo } from "@mantine/ds";
+import { useContext } from "react";
 
 interface NavbarLinkProps {
     icon: React.FC<any>;
@@ -25,13 +26,14 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
     );
 }
 
-const pages = [
-    { link: '/dashboard', label: 'Profile', icon: IconUser },
-    { link: '/dashboard/product', label: 'Product', icon: IconSettings },
-    { link: '/dashboard/support', label: 'Support', icon: IconPhoneCall },
+const pages: { link: string, label: string, icon: any, roles: string[] }[] = [
+    { link: '/dashboard', label: 'Profile', icon: IconUser, roles: [] },
+    { link: '/dashboard/product', label: 'Product', icon: IconSettings, roles: ['ADMIN', 'MODERATOR'] },
+    { link: '/dashboard/support', label: 'Support', icon: IconPhoneCall, roles: [] },
 ];
 
 export default function DashboardLayout({ children, label }: { children: React.ReactNode, label: string }) {
+    const { onEvent } = useContext(AuthContext);
     const router = useRouter();
     const [token, setToken] = useLocalStorage({ key: 'token' });
 
@@ -50,6 +52,7 @@ export default function DashboardLayout({ children, label }: { children: React.R
 
     const onLogout = () => {
         setToken('');
+        onEvent('SIGNOUT');
         router.push('/auth/signin');
     }
 
@@ -75,7 +78,9 @@ export default function DashboardLayout({ children, label }: { children: React.R
                     </Navbar.Section>
                 </Navbar>
                 <Box>
-                    {children}
+                    <Auth auth={true} roles={pages.find((page) => page.label == label)?.roles}>
+                        {children}
+                    </Auth>
                 </Box>
             </Auth>
         </Layout>

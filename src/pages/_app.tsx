@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/components/common/auth'
 import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
 import type { AppProps } from 'next/app'
@@ -10,7 +11,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </MantineProvider>
     </>
   )

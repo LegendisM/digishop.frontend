@@ -17,7 +17,7 @@ export default function Product({ data }: { data: IProduct }) {
             <Group position="apart" mt="sm" mb="xs">
                 <Text weight={500}>{data.name}</Text>
                 <Group position="right">
-                    {data.category.map((value, index) => (<Badge color={index % 2 == 0 ? "green" : "yellow"} variant="light">{value}</Badge>))}
+                    {data.category.map((value, index) => (<Badge key={index} color={index % 2 == 0 ? "green" : "yellow"} variant="light">{value}</Badge>))}
                 </Group>
             </Group>
 

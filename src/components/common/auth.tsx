@@ -1,20 +1,55 @@
-import { Flex, Paper, Container, Button, Title, Text, Space } from "@mantine/core";
-import { useLocalStorage, useTimeout } from "@mantine/hooks"
+import { createContext, useContext, useEffect, useState } from "react";
 import { IconLock } from "@tabler/icons-react";
-import { useState } from "react";
+import { useTimeout } from "@mantine/hooks"
+import { IAuthUser } from "@/common/interfaces/auth/auth.interface";
+import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box } from "@mantine/core";
+import { useAxios } from "@/common/service/api.service";
+import { GET_API_ROUTE } from "@/constants/api.config";
+import { IUser } from "@/common/interfaces/user/user.interface";
 
-export default function Auth(data: { children: React.ReactNode, auth: boolean, message?: boolean }) {
-    const [token, setToken] = useLocalStorage({ key: 'token' });
-    const isAuth = (token && typeof token == "string" && token.length > 0) == true;
+export const AuthContext = createContext<IAuthUser>({ auth: false } as IAuthUser);
+
+export function AuthProvider(data: { children: React.ReactNode }) {
+    const [auth, setAuth] = useState<IAuthUser>({ auth: false } as IAuthUser);
+    const [{ data: fetchData, loading }] = useAxios<IUser>({
+        url: GET_API_ROUTE('user', 'fetch')
+    }, { manual: false });
+
+    const onEvent = (type: 'SIGNIN' | 'SIGNOUT') => {
+        setAuth({
+            auth: (type == "SIGNIN"),
+            user: (type == "SIGNOUT" ? undefined : auth.user)
+        } as IAuthUser);
+    }
+
+    useEffect(() => {
+        setAuth({
+            auth: fetchData != null && fetchData.id !== null,
+            user: fetchData
+        } as IAuthUser);
+    }, [fetchData]);
 
     return (
-        <>
-            {isAuth == data.auth ? data.children : (data.message == true ? <InvalidAuth /> : null)}
-        </>
+        <AuthContext.Provider value={{ ...auth, ...{ onEvent } }}>
+            <LoadingOverlay visible={loading} />
+            {loading ? null : data.children}
+        </AuthContext.Provider >
     )
 }
 
-export function InvalidAuth() {
+export default function Auth(data: { children: React.ReactNode, auth: boolean, roles?: string[], message?: boolean }) { // TODO: roles input to check roles of users
+    const { roles = [] } = data;
+    const { auth, user } = useContext(AuthContext);
+
+    return (
+        <>
+            {auth == data.auth ? ((roles.length == 0) || (roles.some((role) => user?.roles.includes(role))) ? data.children : <InvalidAuth solve={false} />) : (data.message == true ? <InvalidAuth /> : null)}
+        </>
+    );
+}
+
+export function InvalidAuth(data: { message?: string, solve?: boolean }) {
+    const { message = "Access Denied", solve = true } = data;
     const [hidden, setHidden] = useState(true);
     const { start, clear } = useTimeout(() => setHidden(false), 1000, { autoInvoke: true });
 
@@ -25,14 +60,16 @@ export function InvalidAuth() {
                     <IconLock size={'55px'} />
                     <Space h={'sm'} />
                     <Title sx={{ fontSize: '1.35rem' }}>
-                        Access Denied
+                        {message}
                     </Title>
                     <Space h={'xs'} />
-                    <Text>
-                        Login to your account first
-                    </Text>
-                    <Space h={'lg'} />
-                    <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
+                    <Box hidden={!solve}>
+                        <Text>
+                            Login to your account first
+                        </Text>
+                        <Space h={'lg'} />
+                        <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
+                    </Box>
                 </Flex>
             </Paper>
         </Container>
