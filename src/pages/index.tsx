@@ -9,14 +9,21 @@ export default function HomePage() {
         key={1}
         title='General'
         category='General'
-        description='test description'
+        description='Main category'
         limit={8}
       />
       <ProductCategory
         key={2}
         title='Special'
         category='Special'
-        description='test description 2'
+        description='Products with incredible features'
+        limit={8}
+      />
+      <ProductCategory
+        key={3}
+        title='Free'
+        category='Free'
+        description='Free products to trust us'
         limit={8}
       />
     </Layout>

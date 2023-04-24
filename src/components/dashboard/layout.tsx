@@ -1,12 +1,12 @@
-import { Box, Center, Navbar, Stack, Tooltip, UnstyledButton } from "@mantine/core";
+import { Box, Center, Divider, Navbar, Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import Auth, { AuthContext } from "../common/auth";
 import Layout from "../layout";
 import { IconUser, IconSettings, IconPhoneCall, IconLogout, IconBackspace } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useStyles } from "@/styles/dashboard/style";
 import { useLocalStorage } from "@mantine/hooks";
-import { MantineLogo } from "@mantine/ds";
 import { useContext } from "react";
+import Logo from "../common/logo";
 
 interface NavbarLinkProps {
     icon: React.FC<any>;
@@ -61,11 +61,12 @@ export default function DashboardLayout({ children, label }: { children: React.R
             <Auth auth={true} message={true}>
                 <Navbar width={{ base: 80 }} p="md">
                     <Center>
-                        <MantineLogo type="mark" size={30} />
+                        <Logo small={true} size={'2.8rem'} />
                     </Center>
+                    <Divider mt={'md'} />
 
-                    <Navbar.Section grow mt={50}>
-                        <Stack justify="center" spacing={0}>
+                    <Navbar.Section grow mt={15}>
+                        <Stack justify="center" spacing={5}>
                             {links}
                         </Stack>
                     </Navbar.Section>

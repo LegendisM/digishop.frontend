@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { IconLock } from "@tabler/icons-react";
 import { useTimeout } from "@mantine/hooks"
 import { IAuthUser } from "@/common/interfaces/auth/auth.interface";
-import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box, Group, Center } from "@mantine/core";
+import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box, Group, Center, Skeleton } from "@mantine/core";
 import { useAxios } from "@/common/service/api.service";
 import { GET_API_ROUTE } from "@/constants/api.config";
 import { IUser } from "@/common/interfaces/user/user.interface";
@@ -31,10 +31,12 @@ export function AuthProvider(data: { children: React.ReactNode }) {
 
     return (
         <AuthContext.Provider value={{ ...auth, ...{ onEvent } }}>
-            <Center>
+            <Group position="center">
                 <LoadingOverlay visible={loading} />
-            </Center>
-            {loading ? null : data.children}
+            </Group>
+            <Skeleton visible={loading}>
+                {data.children}
+            </Skeleton>
         </AuthContext.Provider >
     )
 }

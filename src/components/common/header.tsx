@@ -9,12 +9,14 @@ import {
     Drawer,
     ScrollArea,
     rem,
+    useMantineColorScheme,
+    ActionIcon,
 } from '@mantine/core';
-import { MantineLogo } from '@mantine/ds';
 import { useDisclosure } from '@mantine/hooks';
 import Auth from './auth';
-import { IconSettings, IconUser, IconUserBolt } from '@tabler/icons-react';
+import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { IconUserCircle } from '@tabler/icons-react';
+import Logo from './logo';
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -68,14 +70,16 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function HeaderPro({ pageKey }: { pageKey: string }) {
-    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const { classes, theme } = useStyles();
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const dark = colorScheme === 'dark';
+    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 
     return (
         <Box>
             <Header height={60} px="md">
                 <Group position="apart" sx={{ height: '100%' }}>
-                    <MantineLogo size={30} />
+                    <Logo />
 
                     <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
                         <a href="/" className={classes.link}>
@@ -97,6 +101,15 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                         <Auth auth={true}>
                             <Button leftIcon={<IconUserCircle />} href='/dashboard' component='a' variant="default">Profile</Button>
                         </Auth>
+                        <ActionIcon
+                            size={'lg'}
+                            variant="light"
+                            color={dark ? 'yellow' : 'blue'}
+                            onClick={() => toggleColorScheme()}
+                            title="Toggle color scheme"
+                        >
+                            {dark ? <IconSun size="1.25rem" /> : <IconMoonStars size="1.25rem" />}
+                        </ActionIcon>
                     </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />

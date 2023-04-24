@@ -23,7 +23,7 @@ export default function ProductCategory({ title, category, description, limit }:
             </Box>
             <Divider mt={'sm'} mb={'sm'}></Divider>
             <Box p={'xs'}>
-                <Skeleton visible={false}>
+                <Skeleton visible={loading}>
                     <Flex
                         gap="md"
                         justify="center"
