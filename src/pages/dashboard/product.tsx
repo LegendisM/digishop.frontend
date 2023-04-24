@@ -18,6 +18,7 @@ export default function ProductPage() {
     const { auth, user } = useContext(AuthContext);
     const [file, setFile] = useState<File | null>(null);
     const [actionMode, setActionMode] = useState<"Create" | "Edit">("Create");
+    const [actionError, setActionError] = useState<string | null>('');
     const [activePage, setActivePage] = useState(1);
     const [opened, { open, close }] = useDisclosure(false);
     const [selectedCategories, setSelectedCategories] = useState<{ value: string, label: string }[]>([]);
@@ -145,8 +146,13 @@ export default function ProductPage() {
                     let formData = JsonToFormData(form.values);
                     let category = form.values.category.join(',');
                     formData.set('category', category);
-                    if (actionMode == "Create" && file) {
-                        formData.set('cover', file);
+                    if (actionMode == "Create") {
+                        if (file) {
+                            formData.set('cover', file);
+                        } else {
+                            setActionError('Cover Image is Required');
+                            return;
+                        }
                     }
                     productAction({
                         method: actionMode == "Create" ? "POST" : "PUT",
@@ -157,10 +163,14 @@ export default function ProductPage() {
                         name="cover"
                         label="Cover"
                         placeholder="Pick image"
+                        error={actionError}
                         required
                         withAsterisk
                         value={file}
-                        onChange={setFile}
+                        onChange={(file) => {
+                            setFile(file);
+                            setActionError(file ? null : actionError);
+                        }}
                         icon={<IconUpload size={rem(14)} />}
                     /> : null}
                     <TextInput

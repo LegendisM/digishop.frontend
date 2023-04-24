@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { IconLock } from "@tabler/icons-react";
 import { useTimeout } from "@mantine/hooks"
 import { IAuthUser } from "@/common/interfaces/auth/auth.interface";
-import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box } from "@mantine/core";
+import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box, Group, Center } from "@mantine/core";
 import { useAxios } from "@/common/service/api.service";
 import { GET_API_ROUTE } from "@/constants/api.config";
 import { IUser } from "@/common/interfaces/user/user.interface";
@@ -31,7 +31,9 @@ export function AuthProvider(data: { children: React.ReactNode }) {
 
     return (
         <AuthContext.Provider value={{ ...auth, ...{ onEvent } }}>
-            <LoadingOverlay visible={loading} />
+            <Center>
+                <LoadingOverlay visible={loading} />
+            </Center>
             {loading ? null : data.children}
         </AuthContext.Provider >
     )
@@ -68,7 +70,9 @@ export function InvalidAuth(data: { message?: string, solve?: boolean }) {
                             Login to your account first
                         </Text>
                         <Space h={'lg'} />
-                        <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
+                        <Group position={'center'}>
+                            <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
+                        </Group>
                     </Box>
                 </Flex>
             </Paper>

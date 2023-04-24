@@ -13,7 +13,8 @@ import {
 import { MantineLogo } from '@mantine/ds';
 import { useDisclosure } from '@mantine/hooks';
 import Auth from './auth';
-import { IconSettings } from '@tabler/icons-react';
+import { IconSettings, IconUser, IconUserBolt } from '@tabler/icons-react';
+import { IconUserCircle } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -94,7 +95,7 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                             <Button href='/auth/signup' component='a'>Sign up</Button>
                         </Auth>
                         <Auth auth={true}>
-                            <Button leftIcon={<IconSettings />} href='/dashboard' component='a' variant="default">Profile</Button>
+                            <Button leftIcon={<IconUserCircle />} href='/dashboard' component='a' variant="default">Profile</Button>
                         </Auth>
                     </Group>
 
@@ -132,7 +133,7 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                             <Button href='/auth/signup' component='a'>Sign up</Button>
                         </Auth>
                         <Auth auth={true}>
-                            <Button href='/dashboard' component='a' variant="default">Profile</Button>
+                            <Button leftIcon={<IconUserCircle />} href='/dashboard' component='a' variant="default">Profile</Button>
                         </Auth>
                     </Group>
                 </ScrollArea>
