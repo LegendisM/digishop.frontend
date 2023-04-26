@@ -10,8 +10,10 @@ import Alerts, { AlertColors } from "@/components/common/alerts";
 import { IProfileFetchResponseDto, IProfileUpdateResponseDto } from "@/common/interfaces/profile/profile.dto";
 import { JsonToFormData } from "@/common/helpers/form.helpers";
 import { AxiosResponse } from "axios";
+import { useGlobalStyles } from "@/styles/global";
 
 export default function ProfilePage() {
+    const { classes, theme } = useGlobalStyles();
     const [fileError, setFileError] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const form = useForm({
@@ -60,7 +62,7 @@ export default function ProfilePage() {
         <DashboardLayout label="Profile">
             <LoadingOverlay visible={fetchLoading || updaeLoading} />
             <Container size={'md'}>
-                <Paper p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
+                <Paper className={classes.customPaper} p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
                     <Box component="form" onSubmit={form.onSubmit(onSubmit)}>
                         <Flex justify={'space-between'} align={'center'}>
                             <Avatar src={fetchData?.avatar ? `${UPLOADS_STORAGE}/avatars/${fetchData.avatar}` : null} size={'xl'} radius={'sm'} />

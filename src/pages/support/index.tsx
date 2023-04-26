@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { hasLength, useForm } from '@mantine/form';
 import { IconPhoneCall } from '@tabler/icons-react';
-import { TextInput, Textarea, Group, Title, Button, Container, Paper, Divider, Flex, Space, Box, LoadingOverlay } from '@mantine/core';
+import { TextInput, Textarea, Group, Text, Button, Container, Paper, Divider, Flex, Space, Box, LoadingOverlay } from '@mantine/core';
 import Layout from '@/components/layout';
 import { useAxios } from '@/common/service/api.service';
 import { GET_API_ROUTE } from '@/constants/api.config';
@@ -42,13 +42,13 @@ export default function SupportPage() {
                     <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
                         <Flex justify={'space-between'} align={'center'}>
                             <Space />
-                            <Title
+                            <Text
                                 align="center"
-                                size={'18'}
+                                size={'lg'}
                                 sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 700 })}
                             >
                                 Get in touch with our powerful team
-                            </Title>
+                            </Text>
                             <IconPhoneCall />
                         </Flex>
                         <Divider mt={'xs'} mb={'xs'} />

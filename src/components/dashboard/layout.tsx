@@ -3,7 +3,7 @@ import Auth, { AuthContext } from "../common/auth";
 import Layout from "../layout";
 import { IconUser, IconSettings, IconPhoneCall, IconLogout, IconBackspace } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { useStyles } from "@/styles/dashboard/style";
+import { useStyles } from "@/styles/dashboard/dashboard-style";
 import { useLocalStorage } from "@mantine/hooks";
 import { useContext } from "react";
 import Logo from "../common/logo";
@@ -33,8 +33,9 @@ const pages: { link: string, label: string, icon: any, roles: string[] }[] = [
 ];
 
 export default function DashboardLayout({ children, label }: { children: React.ReactNode, label: string }) {
-    const { onEvent } = useContext(AuthContext);
     const router = useRouter();
+    const { onEvent } = useContext(AuthContext);
+    const { classes, cx } = useStyles();
     const [token, setToken] = useLocalStorage({ key: 'token' });
 
     const links = pages.map((item, index) => (
@@ -59,7 +60,7 @@ export default function DashboardLayout({ children, label }: { children: React.R
     return (
         <Layout pageKey="dashboard" title={`Dashboard ${label}`} description="dashboard control panel" shell={{ header: <></>, footer: <></> }}>
             <Auth auth={true} message={true}>
-                <Navbar width={{ base: 80 }} p="md">
+                <Navbar className={classes.nav} width={{ base: 80 }} p="md">
                     <Center>
                         <Logo small={true} size={'2.8rem'} />
                     </Center>

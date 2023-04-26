@@ -38,13 +38,13 @@ export default function SearchPage() {
                 <Paper shadow={'md'} withBorder p={30} pt={20} mt={30} radius={'md'}>
                     <Flex justify={'space-between'} align={'center'}>
                         <Space />
-                        <Title
+                        <Text
                             align="center"
-                            size={'18'}
+                            size={'lg'}
                             sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 700 })}
                         >
                             Advanced Search
-                        </Title>
+                        </Text>
                         <IconSearch />
                     </Flex>
                     <Divider mt={'xs'} mb={'xs'} />

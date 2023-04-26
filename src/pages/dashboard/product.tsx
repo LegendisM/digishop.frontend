@@ -12,9 +12,11 @@ import { IProduct } from "@/common/interfaces/product/product.interface";
 import { AxiosResponse } from "axios";
 import { AuthContext } from "@/components/common/auth";
 import { JsonToFormData } from "@/common/helpers/form.helpers";
+import { useGlobalStyles } from "@/styles/global";
 
 export default function ProductPage() {
     const limit = 10;
+    const { classes, theme } = useGlobalStyles();
     const { auth, user } = useContext(AuthContext);
     const [file, setFile] = useState<File | null>(null);
     const [actionMode, setActionMode] = useState<"Create" | "Edit">("Create");
@@ -91,7 +93,7 @@ export default function ProductPage() {
         <DashboardLayout label="Product">
             <LoadingOverlay visible={fetchLoading || productActionLoading || productDeleteLoading} />
             <Container fluid>
-                <Paper p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
+                <Paper className={classes.customPaper} p={'md'} pt={'lg'} radius={'md'} shadow={'md'} withBorder>
                     <Flex justify={'space-between'} align={'center'}>
                         <Title sx={{ fontSize: '1.05rem' }}>
                             Product Management
@@ -100,7 +102,7 @@ export default function ProductPage() {
                     </Flex>
                     <Space h={'md'} />
                     <div style={{ overflowX: 'auto' }}>
-                        <Table striped withBorder withColumnBorders highlightOnHover>
+                        <Table className={classes.customPaper} withBorder withColumnBorders highlightOnHover>
                             <thead>
                                 <tr>
                                     <th>Name</th>

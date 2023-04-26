@@ -76,6 +76,9 @@ export function InvalidAuth(data: { message?: string, solve?: boolean }) {
                             <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
                         </Group>
                     </Box>
+                    <Box hidden={solve}>
+                        You do not have sufficient access to this section
+                    </Box>
                 </Flex>
             </Paper>
         </Container>
