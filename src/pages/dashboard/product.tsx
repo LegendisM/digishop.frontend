@@ -75,6 +75,24 @@ export default function ProductPage() {
         });
     }
 
+    const onProductActionSubmit = () => {
+        let formData = JsonToFormData(form.values);
+        let category = form.values.category.join(',');
+        formData.set('category', category);
+        if (actionMode == "Create") {
+            if (file) {
+                formData.set('cover', file);
+            } else {
+                setActionError('Cover Image is Required');
+                return;
+            }
+        }
+        productAction({
+            method: actionMode == "Create" ? "POST" : "PUT",
+            data: actionMode == "Create" ? formData : ({ ...form.values, ...{ category, price: form.values.price.toString(), stock: form.values.stock.toString() } })
+        }).then(onProductActionResponse).catch(onProductActionResponse);
+    }
+
     const onProductActionResponse = () => {
         form.reset();
         setFile(null);
@@ -144,23 +162,7 @@ export default function ProductPage() {
                 </Paper>
             </Container>
             <Modal opened={opened} size={'lg'} onClose={close} title={`${actionMode} Product`}>
-                <Box component={"form"} onSubmit={form.onSubmit((values) => {
-                    let formData = JsonToFormData(form.values);
-                    let category = form.values.category.join(',');
-                    formData.set('category', category);
-                    if (actionMode == "Create") {
-                        if (file) {
-                            formData.set('cover', file);
-                        } else {
-                            setActionError('Cover Image is Required');
-                            return;
-                        }
-                    }
-                    productAction({
-                        method: actionMode == "Create" ? "POST" : "PUT",
-                        data: actionMode == "Create" ? formData : ({ ...form.values, ...{ category, price: form.values.price.toString(), stock: form.values.stock.toString() } })
-                    }).then(onProductActionResponse).catch(onProductActionResponse);
-                })}>
+                <Box component={"form"} onSubmit={form.onSubmit((values) => onProductActionSubmit())}>
                     {actionMode == "Create" ? <FileInput
                         name="cover"
                         label="Cover"
