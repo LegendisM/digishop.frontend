@@ -7,21 +7,29 @@ import { useStyles } from "@/styles/dashboard/dashboard-style";
 import { useLocalStorage } from "@mantine/hooks";
 import { useContext } from "react";
 import Logo from "../common/logo";
+import Link from "next/link";
 
 interface NavbarLinkProps {
     icon: React.FC<any>;
     label: string;
+    link?: string;
     active?: boolean;
     onClick?(): void;
 }
 
-function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
+function NavbarLink({ icon: Icon, label, active, link = '', onClick }: NavbarLinkProps) {
     const { classes, cx } = useStyles();
     return (
         <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-            <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
-                <Icon size="1.2rem" stroke={1.5} />
-            </UnstyledButton>
+            {onClick ?
+                <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
+                    <Icon size="1.2rem" stroke={1.5} />
+                </UnstyledButton>
+                :
+                <Link href={link} className={cx(classes.link, { [classes.active]: active })}>
+                    <Icon size="1.2rem" stroke={1.5} />
+                </Link>
+            }
         </Tooltip>
     );
 }
@@ -43,7 +51,7 @@ export default function DashboardLayout({ children, label }: { children: React.R
             {...item}
             key={item.label}
             active={item.label === label}
-            onClick={() => router.push(item.link)}
+            link={item.link}
         />
     ));
 

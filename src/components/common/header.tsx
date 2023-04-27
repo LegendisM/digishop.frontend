@@ -17,6 +17,7 @@ import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { IconUserCircle } from '@tabler/icons-react';
 import Logo from './logo';
 import { useStyles } from '@/styles/common/header-style';
+import Link from 'next/link';
 
 export default function HeaderPro({ pageKey }: { pageKey: string }) {
     const { classes, theme } = useStyles();
@@ -31,24 +32,30 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                     <Logo />
 
                     <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
-                        <a href="/" className={classes.link}>
+                        <Link href={'/'} className={classes.link}>
                             Home
-                        </a>
-                        <a href="/search" className={classes.link}>
+                        </Link>
+                        <Link href={'/search'} className={classes.link}>
                             Search
-                        </a>
-                        <a href="/support" className={classes.link}>
+                        </Link>
+                        <Link href={'/support'} className={classes.link}>
                             Support
-                        </a>
+                        </Link>
                     </Group>
 
                     <Group className={classes.hiddenMobile}>
                         <Auth auth={false}>
-                            <Button href='/auth/signin' component='a' variant="default">Login</Button>
-                            <Button href='/auth/signup' component='a'>Sign up</Button>
+                            <Link href={'/auth/signin'}>
+                                <Button variant="default">Login</Button>
+                            </Link>
+                            <Link href={'/auth/signup'}>
+                                <Button>Sign up</Button>
+                            </Link>
                         </Auth>
                         <Auth auth={true}>
-                            <Button leftIcon={<IconUserCircle />} href='/dashboard' component='a' variant="default">Profile</Button>
+                            <Link href={'/dashboard'}>
+                                <Button leftIcon={<IconUserCircle />} variant="default">Profile</Button>
+                            </Link>
                         </Auth>
                         <ActionIcon
                             size={'lg'}
@@ -77,25 +84,31 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
                 <ScrollArea h={`calc(100vh - ${rem(60)})`} mx="-md">
                     <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-                    <a href="/" className={classes.link}>
+                    <Link href={'/'} className={classes.link}>
                         Home
-                    </a>
-                    <a href="/search" className={classes.link}>
+                    </Link>
+                    <Link href={'/search'} className={classes.link}>
                         Search
-                    </a>
-                    <a href="/support" className={classes.link}>
+                    </Link>
+                    <Link href={'/support'} className={classes.link}>
                         Support
-                    </a>
+                    </Link>
 
                     <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
                     <Group position="center" grow pb="xl" px="md">
                         <Auth auth={false}>
-                            <Button href='/auth/signin' component='a' variant="default">Login</Button>
-                            <Button href='/auth/signup' component='a'>Sign up</Button>
+                            <Link href={'/auth/signin'}>
+                                <Button variant="default">Login</Button>
+                            </Link>
+                            <Link href={'/auth/signup'}>
+                                <Button>Sign up</Button>
+                            </Link>
                         </Auth>
                         <Auth auth={true}>
-                            <Button leftIcon={<IconUserCircle />} href='/dashboard' component='a' variant="default">Profile</Button>
+                            <Link href={'/dashboard'}>
+                                <Button leftIcon={<IconUserCircle />} variant="default">Profile</Button>
+                            </Link>
                         </Auth>
                     </Group>
                 </ScrollArea>

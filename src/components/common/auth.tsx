@@ -6,6 +6,7 @@ import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box
 import { useAxios } from "@/common/service/api.service";
 import { GET_API_ROUTE } from "@/constants/api.config";
 import { IUser } from "@/common/interfaces/user/user.interface";
+import Link from "next/link";
 
 export const AuthContext = createContext<IAuthUser>({ auth: false } as IAuthUser);
 
@@ -73,7 +74,9 @@ export function InvalidAuth(data: { message?: string, solve?: boolean }) {
                         </Text>
                         <Space h={'lg'} />
                         <Group position={'center'}>
-                            <Button component="a" href={'/auth/signin'} variant={'default'}>Login</Button>
+                            <Link href={'/auth/signin'}>
+                                <Button variant={'default'}>Login</Button>
+                            </Link>
                         </Group>
                     </Box>
                     <Box hidden={solve}>

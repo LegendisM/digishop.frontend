@@ -10,6 +10,7 @@ import { useContext, useState } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/components/common/auth";
+import Link from "next/link";
 
 export default function SignUpPage() {
     const { onEvent } = useContext(AuthContext);
@@ -55,9 +56,11 @@ export default function SignUpPage() {
                 </Title>
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     You already have an account؟{' '}
-                    <Anchor href="/auth/signin" size="sm">
-                        Login account
-                    </Anchor>
+                    <Link href={'/auth/signin'}>
+                        <Anchor size="sm">
+                            Login account
+                        </Anchor>
+                    </Link>
                 </Text>
 
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
