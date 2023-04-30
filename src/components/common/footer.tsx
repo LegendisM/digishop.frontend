@@ -1,6 +1,5 @@
 import { createStyles, Container, Group, ActionIcon, rem } from '@mantine/core';
-import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons-react';
-import { MantineLogo } from '@mantine/ds';
+import { IconBrandInstagram, IconBrandTelegram, IconBrandGithub } from '@tabler/icons-react';
 import Logo from './logo';
 
 const useStyles = createStyles((theme) => ({
@@ -33,13 +32,13 @@ export default function Footer() {
             <Container className={classes.inner}>
                 <Logo />
                 <Group spacing={0} className={classes.links} position="right" noWrap>
-                    <ActionIcon size="lg">
-                        <IconBrandTwitter size="1.05rem" stroke={1.5} />
+                    <ActionIcon component="a" href="https://github.com/LegendisM" size="lg">
+                        <IconBrandGithub size="1.05rem" stroke={1.5} />
                     </ActionIcon>
-                    <ActionIcon size="lg">
-                        <IconBrandYoutube size="1.05rem" stroke={1.5} />
+                    <ActionIcon component="a" href="https://t.me/LegendisM" size="lg">
+                        <IconBrandTelegram size="1.05rem" stroke={1.5} />
                     </ActionIcon>
-                    <ActionIcon size="lg">
+                    <ActionIcon component="a" href="https://www.instagram.com/legendism76/" size="lg">
                         <IconBrandInstagram size="1.05rem" stroke={1.5} />
                     </ActionIcon>
                 </Group>

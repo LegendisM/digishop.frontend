@@ -6,18 +6,19 @@ import { GET_API_ROUTE } from "@/constants/api.config";
 import { useAxios } from "@/common/service/api.service";
 import { IAuthUser } from "@/common/interfaces/auth/auth.interface";
 import { IUser } from "@/common/interfaces/user/user.interface";
+import { AxiosResponse } from "axios";
 
 export const AuthContext = createContext<IAuthUser>({ auth: false } as IAuthUser);
 
 export function AuthProvider(data: { children: React.ReactNode }) {
     const [auth, setAuth] = useState<IAuthUser>({ auth: false } as IAuthUser);
-    const [{ data: fetchData, loading, error }, fetch] = useAxios<IUser>({
+    const [{ loading, error }, fetch] = useAxios<IUser>({
         url: GET_API_ROUTE('user', 'fetch')
     });
 
     const onEvent = (type: 'SIGNIN' | 'SIGNOUT') => {
         if (type == "SIGNIN") {
-            fetch();
+            startFetch();
         } else {
             setAuth({
                 auth: false,
@@ -28,16 +29,20 @@ export function AuthProvider(data: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!loading && !error) {
-            fetch();
+            startFetch();
         }
     }, []);
 
-    useEffect(() => {
+    const startFetch = () => {
+        fetch().then(onFetchResponse).catch(() => { });
+    }
+
+    const onFetchResponse = ({ data }: AxiosResponse<IUser>) => {
         setAuth({
-            auth: fetchData != null && fetchData.id !== null,
-            user: fetchData ?? null
+            auth: data != null && data.id !== null,
+            user: data ?? null
         } as IAuthUser);
-    }, [fetchData]);
+    }
 
     return (
         <AuthContext.Provider value={{ ...auth, ...{ onEvent } }}>
