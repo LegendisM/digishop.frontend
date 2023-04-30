@@ -68,11 +68,11 @@ export default function ProductPage() {
     }
 
     const onProductDelete = ({ _id: id }: IProduct) => {
-        deleteProduct({ data: { id } }).then((response: AxiosResponse<{ state: boolean }>) => {
-            if (response.data.state) {
+        deleteProduct({ data: { id } }).then(({ data }: AxiosResponse<{ state: boolean }>) => {
+            if (data?.state) {
                 fetchProducts();
             }
-        });
+        }).catch(() => { });
     }
 
     const onProductActionSubmit = () => {

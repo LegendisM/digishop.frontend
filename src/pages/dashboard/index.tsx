@@ -43,8 +43,8 @@ export default function ProfilePage() {
         }
     }, [fetchData]);
 
-    const onUpdate = (response: AxiosResponse<IProfileUpdateResponseDto>) => {
-        if (response.data.state) {
+    const onUpdate = ({ data }: AxiosResponse<IProfileUpdateResponseDto>) => {
+        if (data?.state) {
             setFile(null);
             fetch();
         }
@@ -55,7 +55,7 @@ export default function ProfilePage() {
         if (file) {
             formData.set('avatar', file);
         }
-        update({ data: formData }).then(onUpdate);
+        update({ data: formData }).then(onUpdate).catch(() => { });
     }
 
     return (

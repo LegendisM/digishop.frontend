@@ -1,5 +1,5 @@
 import Layout from "@/components/layout";
-import { Anchor, Button, Container, Paper, PasswordInput, TextInput, Title, Text, Box, Space, LoadingOverlay } from "@mantine/core";
+import { Button, Container, Paper, PasswordInput, TextInput, Title, Text, Box, Space, LoadingOverlay } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
 import { useAxios } from "@/common/service/api.service";
 import { IAuthResponseDto } from "@/common/interfaces/auth/auth.dto";
@@ -33,9 +33,9 @@ export default function SignUpPage() {
     const [overlay, setOverlay] = useState(false);
     const [token, setToken] = useLocalStorage({ key: 'token' });
 
-    const onSignupResponse = (response: AxiosResponse<IAuthResponseDto>) => {
-        if (response.data.state) {
-            setToken(response.data.token);
+    const onSignupResponse = ({ data }: AxiosResponse<IAuthResponseDto>) => {
+        if (data?.state) {
+            setToken(data.token);
             onEvent('SIGNIN');
             setOverlay(true);
             setTimeout(() => {
@@ -57,15 +57,13 @@ export default function SignUpPage() {
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     You already have an account؟{' '}
                     <Link href={'/auth/signin'}>
-                        <Anchor size="sm">
-                            Login account
-                        </Anchor>
+                        Login account
                     </Link>
                 </Text>
 
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
                     <Box component="form" onSubmit={form.onSubmit((values) => {
-                        signup().then(onSignupResponse);
+                        signup().then(onSignupResponse).catch(() => { });
                     })}>
                         <TextInput
                             name="username"

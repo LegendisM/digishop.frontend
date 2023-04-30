@@ -28,8 +28,8 @@ export default function SupportPage() {
         data: form.values
     });
 
-    const onSendResponse = (response: AxiosResponse<ISupportSendResponseDto>) => {
-        if (response.data.state) {
+    const onSendResponse = ({ data }: AxiosResponse<ISupportSendResponseDto>) => {
+        if (data?.state) {
             router.push('/dashboard/support');
         }
     }
@@ -53,7 +53,7 @@ export default function SupportPage() {
                         </Flex>
                         <Divider mt={'xs'} mb={'xs'} />
                         <Box component='form' onSubmit={form.onSubmit((values) => {
-                            send().then(onSendResponse);
+                            send().then(onSendResponse).catch(() => { });
                         })}>
                             <TextInput
                                 name="subject"

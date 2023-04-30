@@ -23,6 +23,11 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
+    const { response } = error;
+    if (response) {
+        let message = response.data?.message;
+        error.message = message ?? error.message;
+    }
     return Promise.reject(error);
 });
 

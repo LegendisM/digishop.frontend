@@ -49,7 +49,7 @@ export default function SearchPage() {
                     </Flex>
                     <Divider mt={'xs'} mb={'xs'} />
                     <Box component={'form'} onSubmit={form.onSubmit((values) => {
-                        search().then(onSearchResponse);
+                        search().then(onSearchResponse).catch(() => { });
                     })}>
                         <MultiSelect
                             name="category"
