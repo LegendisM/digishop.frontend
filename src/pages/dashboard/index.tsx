@@ -31,11 +31,17 @@ export default function ProfilePage() {
     const [{ data: fetchData, loading: fetchLoading, error: fetchError }, fetch] = useAxios<IProfileFetchResponseDto>({
         url: GET_API_ROUTE('profile', 'fetch'),
         method: 'GET'
-    }, { manual: false });
+    });
     const [{ data: updateData, loading: updaeLoading, error: updateError }, update] = useAxios<IProfileUpdateResponseDto>({
         url: GET_API_ROUTE('profile', 'update'),
         method: 'PUT'
     });
+
+    useEffect(() => {
+        if (!fetchLoading && !fetchError) {
+            fetch();
+        }
+    }, []);
 
     useEffect(() => {
         if (fetchData) {

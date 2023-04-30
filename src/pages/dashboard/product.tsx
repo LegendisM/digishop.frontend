@@ -45,7 +45,7 @@ export default function ProductPage() {
             ...{ name: "", category: [], description: "", page: activePage, limit },
             ...(user?.roles.includes('ADMIN') ? {} : { owner: user?.id })
         },
-    }, { manual: false });
+    });
     const [{ loading: productActionLoading }, productAction] = useAxios<IProduct>({
         url: GET_API_ROUTE('product', 'create/update')
     });
@@ -99,6 +99,12 @@ export default function ProductPage() {
         close();
         fetchProducts();
     }
+
+    useEffect(() => {
+        if (!fetchLoading && !fetchError) {
+            fetchProducts();
+        }
+    }, []);
 
     useEffect(() => {
         setSelectedCategories(form.values.category.map((value) => ({ label: value, value })));

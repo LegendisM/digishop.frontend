@@ -33,5 +33,5 @@ instance.interceptors.response.use(function (response) {
 
 export const useAxios = makeUseAxios({
     axios: instance,
-    defaultOptions: { manual: true },
+    defaultOptions: { manual: true, autoCancel: false },
 });

@@ -25,7 +25,7 @@ export default function SearchPage() {
         method: 'POST',
         url: GET_API_ROUTE('product', 'find'),
         data: form.values
-    }, { manual: true });
+    });
 
     const onSearchResponse = () => {
         open();

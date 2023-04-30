@@ -11,16 +11,26 @@ export const AuthContext = createContext<IAuthUser>({ auth: false } as IAuthUser
 
 export function AuthProvider(data: { children: React.ReactNode }) {
     const [auth, setAuth] = useState<IAuthUser>({ auth: false } as IAuthUser);
-    const [{ data: fetchData, loading }] = useAxios<IUser>({
+    const [{ data: fetchData, loading, error }, fetch] = useAxios<IUser>({
         url: GET_API_ROUTE('user', 'fetch')
-    }, { manual: false });
+    });
 
     const onEvent = (type: 'SIGNIN' | 'SIGNOUT') => {
-        setAuth({
-            auth: (type == "SIGNIN"),
-            user: (type == "SIGNOUT" ? undefined : auth.user)
-        } as IAuthUser);
+        if (type == "SIGNIN") {
+            fetch();
+        } else {
+            setAuth({
+                auth: false,
+                user: undefined
+            } as IAuthUser);
+        }
     }
+
+    useEffect(() => {
+        if (!loading && !error) {
+            fetch();
+        }
+    }, []);
 
     useEffect(() => {
         setAuth({

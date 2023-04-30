@@ -3,13 +3,20 @@ import { Divider, Box, Text, Flex, Skeleton } from '@mantine/core';
 import { useAxios } from '@/common/service/api.service';
 import { GET_API_ROUTE } from '@/constants/api.config';
 import { IProductFindResponseDto } from '@/common/interfaces/product/product.dto';
+import { useEffect } from 'react';
 
 export default function ProductCategory({ title, category, description, limit }: { title: string, category: string, description: string, limit: number }) {
-    const [{ data, loading, error }] = useAxios<IProductFindResponseDto>({
+    const [{ data, loading, error }, fetch] = useAxios<IProductFindResponseDto>({
         url: GET_API_ROUTE('product', 'find'),
         method: 'POST',
         data: { name: "", category: [category], description: "", page: 1, limit },
-    }, { manual: false });
+    });
+
+    useEffect(() => {
+        if (!loading && !error) {
+            fetch();
+        }
+    }, []);
 
     return (
         <Box p={'xs'}>
