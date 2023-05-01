@@ -56,7 +56,7 @@ export default function SignUpPage() {
                 </Title>
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     You already have an account؟{' '}
-                    <Link href={'/auth/signin'}>
+                    <Link href={'/auth/signin'} style={{ textDecoration: 'none' }}>
                         Login account
                     </Link>
                 </Text>

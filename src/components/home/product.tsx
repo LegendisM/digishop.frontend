@@ -5,7 +5,7 @@ import { IconCash, IconTextCaption } from "@tabler/icons-react";
 
 export default function Product({ data }: { data: IProduct }) {
     return (
-        <Card shadow="sm" padding="sm" radius="md" miw={"300px"} withBorder>
+        <Card shadow="sm" padding="sm" radius="md" w={'280px'} withBorder>
             <Card.Section>
                 <Image
                     src={`${UPLOADS_STORAGE}/products/${data.cover}`}
@@ -26,7 +26,7 @@ export default function Product({ data }: { data: IProduct }) {
                 <Group spacing={'5px'}>
                     <IconCash size={'18px'} />
                     <Text>
-                        ${data.price}
+                        {data.price}
                     </Text>
                 </Group>
                 <Group spacing={'5px'} mt={"xs"}>

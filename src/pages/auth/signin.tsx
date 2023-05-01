@@ -56,7 +56,7 @@ export default function SignInPage() {
                 </Title>
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     Do not have an account yet?{' '}
-                    <Link href={'/auth/signup'}>
+                    <Link href={'/auth/signup'} style={{ textDecoration: 'none' }}>
                         Create account
                     </Link>
                 </Text>

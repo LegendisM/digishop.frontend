@@ -2,7 +2,7 @@ import { createStyles, rem } from "@mantine/core";
 
 export const useStyles = createStyles((theme) => ({
     header: {
-        backgroundColor: theme.colorScheme === "dark" ? "#5144ac1f" : theme.white,
+        backgroundColor: theme.colorScheme === "dark" ? "#23223f" : theme.white,
         boxShadow: theme.colorScheme === "dark" ? "0px 0px 7px 0px #1a182ed1" : "none",
     },
     link: {

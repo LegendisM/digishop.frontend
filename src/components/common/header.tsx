@@ -98,16 +98,16 @@ export default function HeaderPro({ pageKey }: { pageKey: string }) {
 
                     <Group position="center" grow pb="xl" px="md">
                         <Auth auth={false}>
-                            <Link href={'/auth/signin'}>
-                                <Button variant="default">Login</Button>
+                            <Link href={'/auth/signin'} style={{ textDecoration: 'none' }}>
+                                <Button variant="default" fullWidth>Login</Button>
                             </Link>
-                            <Link href={'/auth/signup'}>
-                                <Button>Sign up</Button>
+                            <Link href={'/auth/signup'} style={{ textDecoration: 'none' }}>
+                                <Button fullWidth>Sign up</Button>
                             </Link>
                         </Auth>
                         <Auth auth={true}>
-                            <Link href={'/dashboard'}>
-                                <Button leftIcon={<IconUserCircle />} variant="default">Profile</Button>
+                            <Link href={'/dashboard'} style={{ textDecoration: 'none' }}>
+                                <Button leftIcon={<IconUserCircle />} variant="default" fullWidth>Profile</Button>
                             </Link>
                         </Auth>
                     </Group>
