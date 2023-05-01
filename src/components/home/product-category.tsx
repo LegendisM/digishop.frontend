@@ -4,8 +4,10 @@ import { useAxios } from '@/common/service/api.service';
 import { GET_API_ROUTE } from '@/constants/api.config';
 import { IProductFindResponseDto } from '@/common/interfaces/product/product.dto';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function ProductCategory({ title, category, description, limit }: { title: string, category: string, description: string, limit: number }) {
+    const router = useRouter();
     const [{ data, loading, error }, fetch] = useAxios<IProductFindResponseDto>({
         url: GET_API_ROUTE('product', 'find'),
         method: 'POST',
@@ -16,7 +18,7 @@ export default function ProductCategory({ title, category, description, limit }:
         if (!loading && !error) {
             fetch();
         }
-    }, []);
+    }, [router.asPath]);
 
     return (
         <Box p={'xs'}>

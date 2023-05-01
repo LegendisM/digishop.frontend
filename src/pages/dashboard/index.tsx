@@ -11,8 +11,10 @@ import { IProfileFetchResponseDto, IProfileUpdateResponseDto } from "@/common/in
 import { JsonToFormData } from "@/common/helpers/form.helpers";
 import { AxiosResponse } from "axios";
 import { useGlobalStyles } from "@/styles/global";
+import { useRouter } from "next/router";
 
 export default function ProfilePage() {
+    const router = useRouter();
     const { classes, theme } = useGlobalStyles();
     const [fileError, setFileError] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
@@ -41,7 +43,7 @@ export default function ProfilePage() {
         if (!fetchLoading && !fetchError) {
             fetch();
         }
-    }, []);
+    }, [router.asPath]);
 
     useEffect(() => {
         if (fetchData) {

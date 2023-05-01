@@ -13,9 +13,11 @@ import { AxiosResponse } from "axios";
 import { AuthContext } from "@/components/common/auth";
 import { JsonToFormData } from "@/common/helpers/form.helpers";
 import { useGlobalStyles } from "@/styles/global";
+import { useRouter } from "next/router";
 
 export default function ProductPage() {
     const limit = 10;
+    const router = useRouter();
     const { classes, theme } = useGlobalStyles();
     const { auth, user } = useContext(AuthContext);
     const [file, setFile] = useState<File | null>(null);
@@ -104,7 +106,7 @@ export default function ProductPage() {
         if (!fetchLoading && !fetchError) {
             fetchProducts();
         }
-    }, []);
+    }, [router.asPath]);
 
     useEffect(() => {
         setSelectedCategories(form.values.category.map((value) => ({ label: value, value })));

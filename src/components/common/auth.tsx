@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { IconLock } from "@tabler/icons-react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box, Group, Skeleton } from "@mantine/core";
+import { Flex, Paper, Container, Button, Title, Text, Space, LoadingOverlay, Box, Group } from "@mantine/core";
 import { GET_API_ROUTE } from "@/constants/api.config";
 import { useAxios } from "@/common/service/api.service";
 import { IAuthUser } from "@/common/interfaces/auth/auth.interface";
 import { IUser } from "@/common/interfaces/user/user.interface";
 import { AxiosResponse } from "axios";
+import { useRouter } from "next/router";
 
 export const AuthContext = createContext<IAuthUser>({ auth: false } as IAuthUser);
 
 export function AuthProvider(data: { children: React.ReactNode }) {
+    const router = useRouter();
     const [auth, setAuth] = useState<IAuthUser>({ auth: false } as IAuthUser);
     const [{ loading, error }, fetch] = useAxios<IUser>({
         url: GET_API_ROUTE('user', 'fetch')
@@ -31,7 +33,7 @@ export function AuthProvider(data: { children: React.ReactNode }) {
         if (!loading && !error) {
             startFetch();
         }
-    }, []);
+    }, [router.asPath]);
 
     const startFetch = () => {
         fetch().then(onFetchResponse).catch(() => { });
@@ -46,13 +48,8 @@ export function AuthProvider(data: { children: React.ReactNode }) {
 
     return (
         <AuthContext.Provider value={{ ...auth, ...{ onEvent } }}>
-            <Group position="center">
-                <LoadingOverlay visible={loading} />
-            </Group>
-            <Skeleton visible={loading}>
-                {data.children}
-            </Skeleton>
-        </AuthContext.Provider >
+            {loading ? null : data.children}
+        </AuthContext.Provider>
     )
 }
 
